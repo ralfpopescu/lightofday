@@ -12,9 +12,13 @@ function App() {
 
   return (
     <div className="App">
-    <ReactInterval timeout={200} enabled={true}
-          callback={() => setPercent(percent => percent + 1)} />
-      <Player trackId={exampleTrackId} />
+    <ReactInterval timeout={50} enabled={true}
+          callback={() => {
+            if(percent < 100) {
+              setPercent(percent => percent + 1)}
+            }
+            } />
+      {/* <Player trackId={exampleTrackId} /> */}
       <CircleLoader percent={percent / 100}/>
     </div>
   );
