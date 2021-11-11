@@ -19,7 +19,7 @@ function App() {
             }
             } />
       {/* <Player trackId={exampleTrackId} /> */}
-      <CircleLoader percent={percent / 100}/>
+      <CircleLoader />
     </div>
   );
 }
