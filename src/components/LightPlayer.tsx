@@ -80,7 +80,7 @@ const CircleContainer = styled.div`
 
 `;
 
-const PlayButton = styled.div<{ playing: boolean }>`
+const PlayButton = styled.div<{ onClick: () => void, playing: boolean }>`
 z-index: 1;
 width: ${pointSize * 2}px;
 height: ${pointSize * 2}px;
@@ -95,18 +95,22 @@ transition: all 0.1s ease-in-out;
 }
 `
 
-type LightPlayerProps = { playing: boolean, setPlaying: React.Dispatch<SetStateAction<boolean>>; }
+type LightPlayerProps = { 
+    onClick: () => void; 
+    duration: number;
+    passed: number;
+    playing: boolean;
+}
 
 
-export const LightPlayer = ({ playing, setPlaying }: LightPlayerProps) => {
-    const percent = .34;
+export const LightPlayer = ({ onClick, playing, duration, passed }: LightPlayerProps) => {
     return (
         <Container>
-            {console.log({points})}
+            {console.log({duration, passed, percent: passed / duration })}
             <CircleContainer>
-            {points.map(point => <Point {...point} percent={percent} />)}
+            {points.map(point => <Point {...point} percent={passed / duration} />)}
             </CircleContainer>
-            <PlayButton playing={playing} onClick={() => setPlaying(playing => !playing)}/>
+            <PlayButton onClick={onClick} playing={playing} />
         </Container>
     )
 }

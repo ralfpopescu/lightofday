@@ -1,16 +1,24 @@
 import { useEffect, useState } from 'react'
+import { useStopwatch } from 'react-timer-hook';
 import { getAudius } from '../util/audius'
+import { LightPlayer } from './LightPlayer'
 
 type PlayerProps = { trackId: string }
 
 export const Player = ({ trackId }: PlayerProps) => {
     const [playing, setPlaying] = useState<boolean>(false)
     const [audio, setAudio] = useState<HTMLAudioElement>();
+    const [metadata, setMetadata] = useState<any>();
+    const {
+    seconds,
+    start,
+    pause,
+  } = useStopwatch({ autoStart: false });
 
     useEffect(() => {
         const getAudio = async () => {
             const fetchedAudio = await getAudius({}).getTrack({ trackId })
-            console.log({ fetchedAudio })
+            setMetadata(fetchedAudio.data)
             const streamUrl = getAudius({}).streamUrl({ trackId })
             setAudio(new Audio(streamUrl))
         }
@@ -20,14 +28,16 @@ export const Player = ({ trackId }: PlayerProps) => {
     const togglePlay = () => {
         if(audio && playing) {
             audio.pause();
+            pause();
             setPlaying(false);
         } else {
             if(audio) {
                 const playPromise = audio.play();
-                setPlaying(true);
                 if (playPromise !== undefined) {
                     playPromise
                       .then(_ => {
+                        start();
+                        setPlaying(true);
                         console.log("audio played auto");
                       })
                       .catch(error => {
@@ -39,6 +49,10 @@ export const Player = ({ trackId }: PlayerProps) => {
       }
 
       return (
-          <button onClick={togglePlay}>PLAY</button>
+          <LightPlayer 
+            onClick={togglePlay} 
+            duration={metadata?.data?.duration || 0} 
+            passed={seconds} 
+            playing={playing}/>
       )
 }
