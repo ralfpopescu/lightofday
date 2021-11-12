@@ -3,10 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import styled from 'styled-components';
+
+const GlobalStyle = styled.div`
+font-family: 'Space Mono', monospace;
+font-size: 20px;
+`
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&family=Open+Sans+Condensed:wght@300&family=Oxygen&family=Space+Mono&family=Yanone+Kaffeesatz:wght@300&display=swap');
+</style>
+    <GlobalStyle>
+      <App />
+    </GlobalStyle>
   </React.StrictMode>,
   document.getElementById('root')
 );
