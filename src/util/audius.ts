@@ -9,5 +9,8 @@ export const getAudius = ({ appName = defaultAppName, host = defaultHost }: GetA
     stream: ({ trackId }: { trackId: string}) => {
         return axios.get(`${host}/v1/tracks/${trackId}/stream?app_name=${appName}`)
     },
+    getTrack: ({ trackId }: { trackId: string}) => {
+        return axios.get(`${host}/v1/tracks/${trackId}?app_name=${appName}`)
+    },
     streamUrl: ({ trackId }: { trackId: string}) => `${host}/v1/tracks/${trackId}/stream?app_name=${appName}`,
 })

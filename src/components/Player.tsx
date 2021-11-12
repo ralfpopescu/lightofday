@@ -9,6 +9,8 @@ export const Player = ({ trackId }: PlayerProps) => {
 
     useEffect(() => {
         const getAudio = async () => {
+            const fetchedAudio = await getAudius({}).getTrack({ trackId })
+            console.log({ fetchedAudio })
             const streamUrl = getAudius({}).streamUrl({ trackId })
             setAudio(new Audio(streamUrl))
         }
