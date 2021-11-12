@@ -5,6 +5,8 @@ import { LightPlayer } from './components/LightPlayer'
 import { Player } from './components/Player'
 import ReactInterval from 'react-interval';
 import { useStopwatch } from 'react-timer-hook';
+import { Completion } from './components/Completion'
+import { Post } from './components/Post'
 
 const exampleTrackId = 'rEK9Z';
 
@@ -21,7 +23,7 @@ function App() {
               setPercent(percent => percent + 1)}
             }
             } /> */}
-      <Player trackId={exampleTrackId} />
+      <Post />
     </div>
   );
 }
