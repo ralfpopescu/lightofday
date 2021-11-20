@@ -1,43 +1,79 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { useQuery, gql } from "@apollo/client";
 
-import { PostList } from './components/PostList'
-import { Logo } from './components/Logo'
+import { Posts } from "./components/Posts";
+import { Login } from "./components/Login";
+import { Setup } from "./components/Setup";
+import { Logo } from "./components/Logo";
+import { darkColorString, lightColorString } from "./util/theme";
 
-const Container = styled.div`
-display: grid;
-grid-template-rows: 100px 1fr;
-grid-template-columns: 300px 1fr 300px;
-grid-template-areas: "logo menu login" "content content content";
-`
+const ME = gql`
+  query RootMe {
+    me {
+      id
+      email
+      audiusUser {
+        id
+      }
+    }
+  }
+`;
 
-type AreaProps = { area: string }
+const headerHeight = 100;
+
+const Header = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-rows: ${headerHeight}px auto;
+  grid-template-columns: audo 1fr 300px;
+  grid-template-areas: "logo menu login";
+  background-color: ${darkColorString};
+  color: ${darkColorString};
+`;
+
+type AreaProps = { area: string };
 
 const Area = styled.div<AreaProps>`
-grid-area: ${props => props.area};
-display: flex;
-justify-content: center;
-align-items: center;
-`
+  grid-area: ${(props) => props.area};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Content = styled.div`
+  margin-top: ${headerHeight}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fbfbfb;
+`;
 
 function App() {
+  const { data, loading, error } = useQuery(ME);
+
+  const showSetup = data && (!data.me?.email || !data.me?.audiusUser);
   return (
     <div className="App">
-      <Container>
-      <Area area="logo">
+      <Header>
+        <Area area="logo">
           <Logo />
-          <div style={{ marginLeft: '8px'}}>Light of day</div>
-        </Area>
-        <Area area="content" style={{ backgroundColor: '#f1f1f1'}}>
-          <PostList />
+          <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
         </Area>
         <Area area="menu">
-          <div>About</div>
-          <div>Explore</div>
+          <div style={{ color: lightColorString }}>About</div>
+          <div style={{ marginLeft: "8px", color: lightColorString }}>Explore</div>
         </Area>
         <Area area="login">
-          <div>Login</div>
+          <Login />
         </Area>
-      </Container>
+      </Header>
+      <Content>
+        {showSetup && <Setup />}
+        {data?.me && <Posts />}
+      </Content>
     </div>
   );
 }

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.4.17",
+    "@ethersproject/providers": "^5.5.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -10,12 +12,17 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "axios": "^0.24.0",
     "date-fns": "^2.25.0",
     "husky": "^7.0.4",
     "lint-staged": "^11.2.6",
+    "lodash.debounce": "^4.0.8",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
+    "react-cookie": "^4.1.1",
+    "react-debounce-input": "^3.2.5",
     "react-dom": "^17.0.2",
     "react-interval": "^2.1.2",
     "react-scripts": "4.0.3",
@@ -49,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.6",
     "@types/styled-components": "^5.1.15"
   }
 }

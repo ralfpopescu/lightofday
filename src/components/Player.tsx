@@ -20,12 +20,14 @@ export const Player = ({ trackId }: PlayerProps) => {
             const fetchedAudio = await getAudius({}).getTrack({ trackId })
             setMetadata(fetchedAudio.data)
             const streamUrl = getAudius({}).streamUrl({ trackId })
+            console.log({fetchedAudio, streamUrl })
             setAudio(new Audio(streamUrl))
         }
         getAudio();
     }, [trackId])
 
     const togglePlay = () => {
+        console.log('what')
         if(audio && playing) {
             audio.pause();
             pause();

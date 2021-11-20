@@ -29,7 +29,7 @@ const Header = styled.div`
 font-weight: 600;
 text-align: left;
 width: 100%;
-font-size: 24px;
+font-size: 20px;
 `
 
 const Table = styled.div`
@@ -47,7 +47,7 @@ border: 1px solid #ebebeb;
 border-radius: 4px;
 `
 
-const text = `Austria initially emerged as a margraviate around 976 and developed into a duchy and archduchy. In the 16th century, Austria started serving as the heart of the Habsburg Monarchy and the junior branch of the House of Habsburg – one of the most influential royal dynasties in history. As an archduchy, it was a major component and administrative centre of the Holy Roman Empire. Early in the 19th century, Austria established its own empire, which became a great power and the leading force of the German Confederation, but pursued its own course independently of the other German states following its defeat in the Austro-Prussian War in 1866.`
+const text = `I want to start the light of day project off with a sentimental one. When my buddy Pierce passed away, I missed him for a lot of reasons, but it hit me extra hard that we never got to really make a track together. We had a couple small things we passed back and forth, but never a real collaboration. I made this track "pretending" to collab with him. I picked sounds he might have liked, melodies he might have written. It came out pretty and I hope he can hear it wherever he is.`
 
 const dateFormat = (date: Date) => format(date, "MMMM dd, yyyy")
 
@@ -73,7 +73,7 @@ export const Post = () => {
         <Area area="story"><Story>{text}</Story></Area>
         <Area area="startDate">
             <Table>
-                <AlignLeft>Started on:</AlignLeft>
+                <AlignLeft>Inception:</AlignLeft>
                 <AlignLeft>{dateFormat(date)}</AlignLeft>
             </Table>
         </Area>

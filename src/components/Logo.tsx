@@ -36,7 +36,7 @@ display: flex;
   align-items: center;
   transition: all 0.5s ease-in-out;
   justify-content: center;
-  background-color: ${getColorFromArray(darkColor)};
+  background-color: ${getColorFromArray(lightColor)};
 transform: translateY(${-pointSize/2}px) translateX(${-pointSize/2}px) rotate(${props => props.angle}deg) translate(${circleSize/2 - (pointSize/2)}px);
 `
 
@@ -68,7 +68,7 @@ z-index: 1;
 width: ${pointSize * 2}px;
 height: ${pointSize * 2}px;
 border-radius: 50%;
-background-color: ${getColorFromArray(darkColor)};
+background-color: ${getColorFromArray(lightColor)};
 `
 
 
