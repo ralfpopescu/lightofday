@@ -9,8 +9,13 @@ import { Select } from "../../Select";
 
 const Container = styled.div`
   display: grid;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(auto-fill, 1fr);
   grid-gap: 20px;
+  border: 1px solid #ebebeb;
+  max-width: 1000px;
+  padding: 20px;
+  border-radius: 4px;
 `;
 
 const ME = gql`
@@ -78,6 +83,24 @@ export const PostCreate = () => {
 
   return (
     <Container>
+      <div>
+        title: <input value={story} onChange={(e) => setStory(e.target.value)} />
+      </div>
+      <div>
+        track: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
+      </div>
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
+        story:{" "}
+        <textarea
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={{ height: "100%" }}
+        />
+      </div>
+      <Select options={tracksToOptions()} onClick={(value) => setTrackId(value)} />
+      <div>
+        completedness: <CompletednessSelector count={completedness} setCount={setCompletedness} />
+      </div>
       <Button
         onClick={() => {
           console.log({
@@ -102,19 +125,6 @@ export const PostCreate = () => {
       >
         add
       </Button>
-      <div>
-        title: <input value={story} onChange={(e) => setStory(e.target.value)} />
-      </div>
-      <div>
-        completedness: <CompletednessSelector count={completedness} setCount={setCompletedness} />
-      </div>
-      <div>
-        track: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
-      </div>
-      <div>
-        story: <input value={title} onChange={(e) => setTitle(e.target.value)} />
-      </div>
-      <Select options={tracksToOptions()} onClick={(value) => setTrackId(value)} />
     </Container>
   );
 };
