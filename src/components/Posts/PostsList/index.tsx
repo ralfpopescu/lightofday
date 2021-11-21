@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import { Post } from "../Post";
+import { dateSort } from "../../../util/helpers";
+import { PostType } from "../../../types";
 
 const Container = styled.div`
   display: grid;
@@ -20,6 +22,7 @@ const POSTS = gql`
         story
         title
         inceptionDate
+        createdAt
       }
     }
   }
@@ -33,13 +36,13 @@ export const PostsList = () => {
 
   return (
     <Container>
-      {data.me.posts.map((post: any) => (
+      {data?.me?.posts.map((post: PostType) => (
         <Post
           id={post.id}
           completedness={post.completedness}
           title={post.title}
           story={post.story}
-          trackId={post.track.id}
+          trackId={post.track.audiusTrackId}
           inceptionDate={new Date(post.inceptionDate)}
         />
       ))}
