@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { InjectedConnector } from "@web3-react/injected-connector";
+import { Button } from "../Button";
+import { useNavigate } from "react-router";
 
 const GET_NONCE = gql`
   query GetNonce {
@@ -22,28 +24,41 @@ const LOGIN = gql`
   }
 `;
 
-export const Login = () => {
+export const Login = ({ refetch }: { refetch: () => void }) => {
   const provider = useWeb3React<Web3Provider>();
   console.log({ provider });
   const { library, account } = provider;
+  const navigate = useNavigate();
 
   const nonceRequest = useQuery(GET_NONCE);
   const [login, loginRequest] = useMutation(LOGIN);
 
   useEffect(() => {
+    const getWeb3 = async () => {
+      if (!library) {
+        await provider.activate(new InjectedConnector({}));
+      }
+    };
+    getWeb3();
+  }, [library, provider]);
+
+  useEffect(() => {
     if (loginRequest.data) {
-      console.log({ loginRequest });
       const { accessToken } = loginRequest.data.login;
       localStorage.setItem("token", accessToken);
+      console.log("triggered");
+      refetch();
     }
-  }, [loginRequest]);
+  }, [loginRequest.data, refetch]);
 
   return !localStorage.getItem("token") ? (
-    <button
+    <Button
+      secondary
       onClick={async () => {
-        console.log("lcik");
-        if (!library) {
-          await provider.activate(new InjectedConnector({}));
+        if (provider.error) {
+          window.open(
+            "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+          );
         }
         if (nonceRequest.data && library) {
           const { nonce, appSignedNonce } = nonceRequest.data.getNonce;
@@ -64,15 +79,20 @@ export const Login = () => {
         }
       }}
     >
-      {library ? "login" : "connect"}
-    </button>
+      {!provider.error ? "login" : "get metamask"}
+    </Button>
   ) : (
-    <button
+    <Button
+      secondary
       onClick={async () => {
         localStorage.removeItem("token");
+        refetch();
+        nonceRequest.client.resetStore();
+        console.log("refetcjed");
+        navigate("/");
       }}
     >
       logout
-    </button>
+    </Button>
   );
 };

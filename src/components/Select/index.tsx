@@ -33,7 +33,6 @@ const Option = styled.div`
 `;
 
 const EmptyOption = styled.div`
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;

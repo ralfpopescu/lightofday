@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
-import { Post } from "../Post";
+import { Post } from "../../Posts/Post";
 import { PostType } from "../../../types";
+import { useParams } from "react-router";
 
 const Container = styled.div`
   display: grid;
@@ -10,8 +11,9 @@ const Container = styled.div`
 `;
 
 const POSTS = gql`
-  query GetPosts {
-    me {
+  query GetUserPosts($input: GetUserInput!) {
+    user(input: $input) {
+      bio
       posts {
         id
         completedness
@@ -27,8 +29,9 @@ const POSTS = gql`
   }
 `;
 
-export const PostsList = () => {
-  const { data, loading, error } = useQuery(POSTS);
+export const ArtistPage = () => {
+  let { userName } = useParams();
+  const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
 
   if (loading) return <div>"Loading..."</div>;
   if (error) return <div>{error.message}</div>;

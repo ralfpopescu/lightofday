@@ -1,18 +1,27 @@
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
+import { Routes, Route } from "react-router-dom";
 
 import { Posts } from "./components/Posts";
 import { Login } from "./components/Login";
 import { Setup } from "./components/Setup";
 import { Logo } from "./components/Logo";
+import { Feed } from "./components/scenes/Feed";
+import { ArtistPage } from "./components/scenes/ArtistPage";
 import { darkColorString, lightColorString } from "./util/theme";
+import { PostList } from "./components/PostList";
+import { useEffect } from "react";
 
 const ME = gql`
   query RootMe {
     me {
       id
       email
+      userName
       audiusUser {
+        id
+      }
+      posts {
         id
       }
     }
@@ -52,9 +61,9 @@ const Content = styled.div`
 `;
 
 function App() {
-  const { data, loading, error } = useQuery(ME);
+  const { data, loading, error, refetch } = useQuery(ME);
 
-  const showSetup = data && (!data.me?.email || !data.me?.audiusUser);
+  const showSetup = data?.me && (!data.me?.email || !data.me?.audiusUser || !data.me?.userName);
   return (
     <div className="App">
       <Header>
@@ -67,12 +76,22 @@ function App() {
           <div style={{ marginLeft: "8px", color: lightColorString }}>Explore</div>
         </Area>
         <Area area="login">
-          <Login />
+          <Login refetch={refetch} />
         </Area>
       </Header>
       <Content>
-        {showSetup && <Setup />}
-        {data?.me && <Posts />}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                {showSetup && <Setup />}
+                {!showSetup && (data?.me ? <Posts /> : <Feed />)}
+              </>
+            }
+          />
+          <Route path="/artist/:userName" element={<ArtistPage />} />
+        </Routes>
       </Content>
     </div>
   );
