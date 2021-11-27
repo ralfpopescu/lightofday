@@ -64,8 +64,6 @@ export const Feed = () => {
 
   return (
     <Container>
-      <Subheader>Bringing unheard art to the light of day.</Subheader>
-      <Line />
       <Message />
       <Subheader>Latest lights</Subheader>
       <Line />

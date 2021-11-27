@@ -82,15 +82,7 @@ function App() {
       </Header>
       <Content>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                {showSetup && <Setup />}
-                {!showSetup && (data?.me ? <Posts /> : <Feed />)}
-              </>
-            }
-          />
+          <Route path="/" element={<>{showSetup ? <Setup /> : <Feed />}</>} />
           <Route path="/artist/:userName" element={<ArtistPage />} />
           <Route path="/me" element={<Me />} />
         </Routes>
