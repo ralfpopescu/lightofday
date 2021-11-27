@@ -8,6 +8,7 @@ import { Setup } from "./components/Setup";
 import { Logo } from "./components/Logo";
 import { Feed } from "./components/scenes/Feed";
 import { ArtistPage } from "./components/scenes/ArtistPage";
+import { Me } from "./components/scenes/Me";
 import { darkColorString, lightColorString } from "./util/theme";
 import { PostList } from "./components/PostList";
 import { useEffect } from "react";
@@ -91,6 +92,7 @@ function App() {
             }
           />
           <Route path="/artist/:userName" element={<ArtistPage />} />
+          <Route path="/me" element={<Me />} />
         </Routes>
       </Content>
     </div>

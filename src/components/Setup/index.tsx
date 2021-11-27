@@ -6,6 +6,9 @@ import { useMutation, gql, useQuery } from "@apollo/client";
 import { AudiusUserData } from "../../types/audius";
 import { Select } from "../Select";
 import { Button } from "../Button";
+import { Highlight } from "../Highlight";
+import { Subheader } from "../Subheader";
+import { Line } from "../Line";
 
 const validateEmail = (email: string) =>
   /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
@@ -41,20 +44,23 @@ const USER_UPDATE = gql`
   }
 `;
 
-export const Setup = () => {
+type SetupProps = { isSetup?: boolean };
+
+export const Setup = ({ isSetup = false }: SetupProps) => {
   const { data } = useQuery(ME);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [response, setResponse] = useState<{ data: AudiusUserData[] }>();
-  const [selectedUser, setSelectedUser] = useState<{ name: string; id: string }>();
+  const [audiusUser, setAudiusUser] = useState<{ name: string; id: string }>();
   const [userUpdate, userUpdateRequest] = useMutation(USER_UPDATE);
 
   useEffect(() => {
     if (data && data.me) {
       if (data.me.email) setEmail(data.me.email);
       if (data.me.userName) setUserName(data.me.userName);
-      if (data.me.audiusUser) setSelectedUser({ id: data.me.audiusUser.id, name: "" });
+      if (data.me.audiusUser) setAudiusUser({ id: data.me.audiusUser.id, name: "" });
     }
   }, [data]);
 
@@ -79,44 +85,70 @@ export const Setup = () => {
 
   return (
     <Container>
-      <div>Let's get you set up.</div>
+      <Subheader>{isSetup ? `Let's get you set up.` : "You"}</Subheader>
+      <Line />
       <div>Email:</div>
-      <input value={email} onChange={(e: any) => setEmail(e.target.value)} name="email" />
+      {!data?.me?.email || editMode ? (
+        <input value={email} onChange={(e: any) => setEmail(e.target.value)} name="email" />
+      ) : (
+        <Highlight>{email}</Highlight>
+      )}
       <div>Light of day username:</div>
-      <input
-        value={userName}
-        onChange={(e: any) => setUserName(e.target.value)}
-        name="username"
-        autoComplete="none"
-      />
-      <div>Audius artist:</div>
-      <DebounceInput
-        minLength={2}
-        debounceTimeout={300}
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        name="audius-artist"
-        autoComplete="none"
-      />
-      <Select
-        options={getOptions()}
-        onClick={(value, label) => setSelectedUser({ id: value, name: label })}
-      />
-      {selectedUser && <div>{selectedUser.id}</div>}
-      <Button
-        disabled={!validateEmail(email) || !selectedUser || userName === ""}
-        onClick={() => {
-          console.log({ email, selectedUser });
-          if (email && selectedUser && userName) {
-            userUpdate({
-              variables: { input: { email, audiusUserId: selectedUser.id, userName } },
-            });
-          }
-        }}
-      >
-        save
-      </Button>
-      {JSON.stringify(userUpdateRequest.data)}
+      {!data?.me?.userName || editMode ? (
+        <input
+          value={userName}
+          onChange={(e: any) => setUserName(e.target.value)}
+          name="username"
+          autoComplete="none"
+        />
+      ) : (
+        <Highlight>{userName}</Highlight>
+      )}
+      <div>Audius artist ID:</div>
+      {!data?.me?.audiusUser || editMode ? (
+        <>
+          <DebounceInput
+            minLength={2}
+            debounceTimeout={300}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            name="audius-artist"
+            autoComplete="none"
+          />
+          <Select
+            options={getOptions()}
+            onClick={(value, label) => setAudiusUser({ id: value, name: label })}
+          />
+        </>
+      ) : (
+        <Highlight>{audiusUser?.id}</Highlight>
+      )}
+      {editMode ? (
+        <Button
+          disabled={!validateEmail(email) || !audiusUser || userName === ""}
+          onClick={async () => {
+            console.log({ email, audiusUser });
+            if (email && audiusUser && userName) {
+              await userUpdate({
+                variables: { input: { email, audiusUserId: audiusUser.id, userName } },
+              });
+              setEditMode(false);
+            }
+          }}
+          style={{ marginTop: "12px" }}
+        >
+          save
+        </Button>
+      ) : (
+        <Button
+          onClick={() => {
+            setEditMode(true);
+          }}
+          style={{ marginTop: "12px" }}
+        >
+          edit
+        </Button>
+      )}
     </Container>
   );
 };

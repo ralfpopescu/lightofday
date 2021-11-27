@@ -12,6 +12,7 @@ const Container = styled.div`
 const POSTS = gql`
   query GetPosts {
     me {
+      userName
       posts {
         id
         completedness

@@ -7,7 +7,7 @@ const Limit = 5;
 const Height = Limit * OptionHeight + Limit * Margin;
 
 const Container = styled.div`
-  width: 200px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   max-height: ${Height}px;
@@ -16,14 +16,15 @@ const Container = styled.div`
 
 const Option = styled.div`
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: ${OptionHeight}px;
   max-height: ${OptionHeight}px;
   background-color: ${darkColorString};
   color: ${lightColorString};
   border-bottom: ${Margin}px solid white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 300px;
 
   &:hover {
     background-color: ${lightColorString};

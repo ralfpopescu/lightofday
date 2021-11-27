@@ -19,11 +19,17 @@ const UnstyledButton = styled.button<{ secondary?: boolean; disabled?: boolean }
   }
 `;
 
-type ButtonProps = { children: any; onClick: () => void; secondary?: boolean; disabled?: boolean };
+type ButtonProps = {
+  children: any;
+  onClick: () => void;
+  secondary?: boolean;
+  disabled?: boolean;
+  style?: object;
+};
 
-export const Button = ({ children, onClick, secondary, disabled }: ButtonProps) => {
+export const Button = ({ children, onClick, secondary, disabled, style }: ButtonProps) => {
   return (
-    <UnstyledButton onClick={onClick} secondary={secondary} disabled={disabled}>
+    <UnstyledButton onClick={onClick} secondary={secondary} disabled={disabled} style={style}>
       {children}
     </UnstyledButton>
   );

@@ -3,6 +3,8 @@ import { useQuery, gql } from "@apollo/client";
 import { Post } from "../../Posts/Post";
 import { PostType } from "../../../types";
 import { useParams } from "react-router";
+import { Loader } from "../../Loader";
+import { Line } from "../../Line";
 
 const Container = styled.div`
   display: grid;
@@ -10,9 +12,15 @@ const Container = styled.div`
   grid-gap: 20px;
 `;
 
+const Subheader = styled.h2`
+  margin: 0;
+  font-size: 20px;
+`;
+
 const POSTS = gql`
   query GetUserPosts($input: GetUserInput!) {
     user(input: $input) {
+      userName
       bio
       posts {
         id
@@ -33,12 +41,14 @@ export const ArtistPage = () => {
   let { userName } = useParams();
   const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
 
-  if (loading) return <div>"Loading..."</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error.message}</div>;
 
   return (
     <Container>
-      {data?.me?.posts.map((post: PostType) => (
+      <Subheader>{data?.user?.userName}</Subheader>
+      <Line />
+      {data?.user?.posts.map((post: PostType) => (
         <Post
           id={post.id}
           completedness={post.completedness}

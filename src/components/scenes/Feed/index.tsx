@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import { Post } from "../../Posts/Post";
 import { PostType } from "../../../types";
+import { darkColorString, lightColorString } from "../../../util/theme";
 
 const Container = styled.div`
   display: flex;
@@ -27,8 +28,33 @@ const FEED = gql`
   }
 `;
 
-const message = `"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+const Highlight = styled.span`
+  background-color: ${darkColorString};
+  color: ${lightColorString};
 `;
+
+const Subheader = styled.h2`
+  margin: 0;
+  font-size: 20px;
+`;
+
+const Message = () => (
+  <div style={{ maxWidth: "800px", paddingTop: "16px", paddingBottom: "16px" }}>
+    An artists public catalogue is only the <Highlight>tip of the iceberg.</Highlight> There’s an
+    enormous pressure to create high quality, on-brand art all the time, which takes a great deal of
+    trial and error. Only a tiny fraction of these attempts will make the cut, leaving{" "}
+    <Highlight>tons of content withering away</Highlight>. This content is often some of the{" "}
+    <Highlight>artists most interesting work:</Highlight> heartfelt songs that just weren’t poppy
+    enough, beats that were too experimental, exploration of different genres that the fans might
+    not appreciate. This app’s mission is to{" "}
+    <Highlight>bring this art to the light of day.</Highlight> It’s a safe place for artists to
+    share their creations that they love without bloating their official curated catalogue with
+    demos and passion projects. No play count popularity contest, no playlist culture, no
+    unnecessary album art - <Highlight>just snippets of art and the stories behind them.</Highlight>
+  </div>
+);
+
+const Line = () => <div>----------------</div>;
 
 export const Feed = () => {
   const { data, loading, error } = useQuery(FEED);
@@ -38,7 +64,11 @@ export const Feed = () => {
 
   return (
     <Container>
-      <div>{message}</div>
+      <Subheader>Bringing unheard art to the light of day.</Subheader>
+      <Line />
+      <Message />
+      <Subheader>Latest lights</Subheader>
+      <Line />
       {data?.feed?.map((post: PostType) => (
         <Post
           id={post.id}
