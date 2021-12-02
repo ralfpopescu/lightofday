@@ -3,6 +3,9 @@ import { useQuery, gql } from "@apollo/client";
 import { Post } from "../../Posts/Post";
 import { PostType } from "../../../types";
 import { darkColorString, lightColorString } from "../../../util/theme";
+import { Subheader } from "../../Subheader";
+import { Line } from "../../Line";
+import { Artists } from "./Artists";
 
 const Container = styled.div`
   display: flex;
@@ -33,9 +36,9 @@ const Highlight = styled.span`
   color: ${lightColorString};
 `;
 
-const Subheader = styled.h2`
-  margin: 0;
-  font-size: 20px;
+const SubheaderContainer = styled.h2`
+  display: flex;
+  flex-direction: column;
 `;
 
 const Message = () => (
@@ -54,8 +57,6 @@ const Message = () => (
   </div>
 );
 
-const Line = () => <div>----------------</div>;
-
 export const Feed = () => {
   const { data, loading, error } = useQuery(FEED);
 
@@ -65,8 +66,15 @@ export const Feed = () => {
   return (
     <Container>
       <Message />
-      <Subheader>Latest lights</Subheader>
-      <Line />
+      <SubheaderContainer>
+        <Subheader>Artists</Subheader>
+        <Line />
+      </SubheaderContainer>
+      <Artists />
+      <SubheaderContainer>
+        <Subheader>Latest lights</Subheader>
+        <Line />
+      </SubheaderContainer>
       {data?.feed?.map((post: PostType) => (
         <Post
           id={post.id}

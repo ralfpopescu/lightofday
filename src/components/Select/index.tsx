@@ -14,12 +14,12 @@ const Container = styled.div`
   overflow: auto;
 `;
 
-const Option = styled.div`
+const Option = styled.div<{ active?: boolean }>`
   cursor: pointer;
   min-height: ${OptionHeight}px;
   max-height: ${OptionHeight}px;
-  background-color: ${darkColorString};
-  color: ${lightColorString};
+  background-color: ${(props) => (props.active ? lightColorString : darkColorString)};
+  color: ${(props) => (props.active ? darkColorString : lightColorString)};
   border-bottom: ${Margin}px solid white;
   white-space: nowrap;
   overflow: hidden;
@@ -46,13 +46,22 @@ const EmptyOption = styled.div`
 
 type OptionType = { value: string; label: string };
 
-type SelectProps = { options: OptionType[]; onClick: (value: string, label: string) => void };
+type SelectProps = {
+  activeValue?: string;
+  options: OptionType[];
+  onClick: (value: string, label: string) => void;
+};
 
-export const Select = ({ options, onClick }: SelectProps) => {
+export const Select = ({ options, onClick, activeValue }: SelectProps) => {
   return (
     <Container>
       {options.map((option) => (
-        <Option onClick={() => onClick(option.value, option.label)}>{option.label}</Option>
+        <Option
+          active={option.value === activeValue}
+          onClick={() => onClick(option.value, option.label)}
+        >
+          {option.label}
+        </Option>
       ))}
       {options.length < 5 && <>{new Array(9 - options.length).fill(<EmptyOption />)}</>}
     </Container>

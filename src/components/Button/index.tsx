@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { darkColorString, lightColorString } from "../../util/theme";
 
-const UnstyledButton = styled.button<{ secondary?: boolean; disabled?: boolean }>`
-  background-color: ${(props) => (props.secondary ? lightColorString : darkColorString)};
-  color: ${(props) => (props.secondary ? darkColorString : lightColorString)};
-  border: none;
+const UnstyledButton = styled.button<{ secondary?: boolean; disabled?: boolean; naked?: boolean }>`
+  background-color: ${(props) =>
+    props.naked ? "transparent" : props.secondary ? lightColorString : darkColorString};
+  color: ${(props) => (props.secondary || props.naked ? darkColorString : lightColorString)};
+  border: ${(props) =>
+    props.naked ? `4px solid ${props.secondary ? lightColorString : darkColorString}` : "none"};
   padding: 12px;
   font: inherit;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
@@ -25,11 +27,18 @@ type ButtonProps = {
   secondary?: boolean;
   disabled?: boolean;
   style?: object;
+  naked?: boolean;
 };
 
-export const Button = ({ children, onClick, secondary, disabled, style }: ButtonProps) => {
+export const Button = ({ children, onClick, secondary, disabled, naked, style }: ButtonProps) => {
   return (
-    <UnstyledButton onClick={onClick} secondary={secondary} disabled={disabled} style={style}>
+    <UnstyledButton
+      onClick={onClick}
+      secondary={secondary}
+      disabled={disabled}
+      style={style}
+      naked={naked}
+    >
       {children}
     </UnstyledButton>
   );

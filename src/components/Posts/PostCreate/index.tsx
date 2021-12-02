@@ -87,7 +87,10 @@ export const PostCreate = () => {
         title: <input value={story} onChange={(e) => setStory(e.target.value)} />
       </div>
       <div>
-        track: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
+        track ID: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
+        <a href="https://audius.co/upload" target="_blank" rel="noreferrer">
+          upload on audius
+        </a>
       </div>
       <div style={{ display: "flex", alignItems: "flex-start" }}>
         story:{" "}
@@ -97,7 +100,11 @@ export const PostCreate = () => {
           style={{ height: "100%" }}
         />
       </div>
-      <Select options={tracksToOptions()} onClick={(value) => setTrackId(value)} />
+      <Select
+        activeValue={audiusTrackId}
+        options={tracksToOptions()}
+        onClick={(value) => setTrackId(value)}
+      />
       <div>
         completedness: <CompletednessSelector count={completedness} setCount={setCompletedness} />
       </div>

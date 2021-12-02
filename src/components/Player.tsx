@@ -1,9 +1,24 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { useStopwatch } from "react-timer-hook";
 import { getAudius } from "../util/audius";
 import { LightPlayer } from "./LightPlayer";
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 type PlayerProps = { trackId: string };
+
+const getTimeFromDuration = (timeInSeconds: number) => {
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = Math.round(timeInSeconds % 60);
+
+  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+};
 
 export const Player = ({ trackId }: PlayerProps) => {
   const [playing, setPlaying] = useState<boolean>(false);
@@ -56,27 +71,36 @@ export const Player = ({ trackId }: PlayerProps) => {
     }
   };
 
+  const duration = metadata?.data?.duration || 0;
+
   return (
-    <LightPlayer
-      onClick={togglePlay}
-      duration={metadata?.data?.duration || 0}
-      passed={startLocation + seconds}
-      playing={playing}
-      setStartLocation={setStartLocation}
-      onOuterCircleClick={(index) => {
-        if (audio) {
-          setStartLocation(Math.floor((index / 15) * metadata?.data?.duration || 1));
-          if (!playing) {
-            audio.play();
-            setPlaying(true);
-          } else {
-            audio.pause();
-            audio.play();
-            setPlaying(true);
+    <Container>
+      <LightPlayer
+        onClick={togglePlay}
+        duration={duration}
+        passed={startLocation + seconds}
+        playing={playing}
+        setStartLocation={setStartLocation}
+        onOuterCircleClick={(index) => {
+          if (audio) {
+            setStartLocation(Math.floor((index / 15) * metadata?.data?.duration || 1));
+            if (!playing) {
+              audio.play();
+              setPlaying(true);
+            } else {
+              audio.pause();
+              audio.play();
+              setPlaying(true);
+            }
+            reset();
           }
-          reset();
-        }
-      }}
-    />
+        }}
+      />
+      {metadata && (
+        <div style={{ paddingTop: "8px" }}>
+          {getTimeFromDuration(startLocation + elapsed)} / {getTimeFromDuration(duration)}
+        </div>
+      )}
+    </Container>
   );
 };

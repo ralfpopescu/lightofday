@@ -18,6 +18,13 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+const ButtonRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 16px;
+`;
+
 const ME = gql`
   query SetupMe {
     me {
@@ -44,11 +51,15 @@ const USER_UPDATE = gql`
   }
 `;
 
+const Section = styled.div`
+  margin-top: 16px;
+`;
+
 type SetupProps = { isSetup?: boolean };
 
 export const Setup = ({ isSetup = false }: SetupProps) => {
   const { data } = useQuery(ME);
-  const [editMode, setEditMode] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(isSetup);
   const [query, setQuery] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
@@ -87,13 +98,13 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
     <Container>
       <Subheader>{isSetup ? `Let's get you set up.` : "You"}</Subheader>
       <Line />
-      <div>Email:</div>
+      <Section>Email:</Section>
       {!data?.me?.email || editMode ? (
         <input value={email} onChange={(e: any) => setEmail(e.target.value)} name="email" />
       ) : (
         <Highlight>{email}</Highlight>
       )}
-      <div>Light of day username:</div>
+      <Section>Light of day username:</Section>
       {!data?.me?.userName || editMode ? (
         <input
           value={userName}
@@ -104,17 +115,21 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
       ) : (
         <Highlight>{userName}</Highlight>
       )}
-      <div>Audius artist ID:</div>
+      <Section>Audius artist ID:</Section>
       {!data?.me?.audiusUser || editMode ? (
         <>
-          <DebounceInput
-            minLength={2}
-            debounceTimeout={300}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            name="audius-artist"
-            autoComplete="none"
-          />
+          {data?.me?.audiusUser && <input value={audiusUser?.id} />}
+          <Section style={{ display: "flex", marginBottom: "16px" }}>
+            <div style={{ marginRight: "8px" }}>Search Audius artists:</div>
+            <DebounceInput
+              minLength={2}
+              debounceTimeout={300}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              name="audius-artist"
+              autoComplete="none"
+            />
+          </Section>
           <Select
             options={getOptions()}
             onClick={(value, label) => setAudiusUser({ id: value, name: label })}
@@ -123,32 +138,45 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
       ) : (
         <Highlight>{audiusUser?.id}</Highlight>
       )}
-      {editMode ? (
-        <Button
-          disabled={!validateEmail(email) || !audiusUser || userName === ""}
-          onClick={async () => {
-            console.log({ email, audiusUser });
-            if (email && audiusUser && userName) {
-              await userUpdate({
-                variables: { input: { email, audiusUserId: audiusUser.id, userName } },
-              });
-              setEditMode(false);
-            }
-          }}
-          style={{ marginTop: "12px" }}
-        >
-          save
-        </Button>
-      ) : (
-        <Button
-          onClick={() => {
-            setEditMode(true);
-          }}
-          style={{ marginTop: "12px" }}
-        >
-          edit
-        </Button>
-      )}
+      <ButtonRow>
+        {editMode ? (
+          <>
+            <Button
+              disabled={!validateEmail(email) || !audiusUser || userName === ""}
+              onClick={async () => {
+                console.log({ email, audiusUser });
+                if (email && audiusUser && userName) {
+                  await userUpdate({
+                    variables: { input: { email, audiusUserId: audiusUser.id, userName } },
+                  });
+                  setEditMode(false);
+                }
+              }}
+              style={{ marginTop: "12px" }}
+            >
+              save
+            </Button>
+            <Button
+              naked
+              onClick={() => {
+                setEditMode(false);
+              }}
+              style={{ marginTop: "12px" }}
+            >
+              cancel
+            </Button>
+          </>
+        ) : (
+          <Button
+            onClick={() => {
+              setEditMode(true);
+            }}
+            style={{ marginTop: "12px" }}
+          >
+            edit
+          </Button>
+        )}
+      </ButtonRow>
     </Container>
   );
 };

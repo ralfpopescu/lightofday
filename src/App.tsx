@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import { Routes, Route } from "react-router-dom";
 
-import { Posts } from "./components/Posts";
 import { Login } from "./components/Login";
 import { Setup } from "./components/Setup";
 import { Logo } from "./components/Logo";
@@ -10,8 +9,8 @@ import { Feed } from "./components/scenes/Feed";
 import { ArtistPage } from "./components/scenes/ArtistPage";
 import { Me } from "./components/scenes/Me";
 import { darkColorString, lightColorString } from "./util/theme";
-import { PostList } from "./components/PostList";
-import { useEffect } from "react";
+import { Link } from "./components/Link";
+import { ReactComponent as UserIcon } from "./assets/user.svg";
 
 const ME = gql`
   query RootMe {
@@ -61,6 +60,22 @@ const Content = styled.div`
   background-color: #fbfbfb;
 `;
 
+const StyledLink = styled(Link)`
+  color: ${lightColorString};
+`;
+
+const StyledIcon = styled(UserIcon)`
+  height: 32px;
+  width: 32px;
+  margin-right: 32px;
+  fill: ${lightColorString};
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 function App() {
   const { data, loading, error, refetch } = useQuery(ME);
 
@@ -69,14 +84,16 @@ function App() {
     <div className="App">
       <Header>
         <Area area="logo">
-          <Logo />
-          <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
+          <StyledLink to="/" secondary>
+            <Logo />
+            <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
+          </StyledLink>
         </Area>
-        <Area area="menu">
-          <div style={{ color: lightColorString }}>About</div>
-          <div style={{ marginLeft: "8px", color: lightColorString }}>Explore</div>
-        </Area>
+        <Area area="menu"></Area>
         <Area area="login">
+          <Link to="/me">
+            <StyledIcon />
+          </Link>
           <Login refetch={refetch} />
         </Area>
       </Header>
