@@ -78,11 +78,13 @@ export const Feed = () => {
       {data?.feed?.map((post: PostType) => (
         <Post
           id={post.id}
+          author={post.user?.userName}
           completedness={post.completedness}
           title={post.title}
           story={post.story}
           trackId={post.track.audiusTrackId}
           inceptionDate={new Date(post.inceptionDate)}
+          showAuthor
         />
       ))}
     </Container>

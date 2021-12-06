@@ -7,6 +7,7 @@ import { Setup } from "./components/Setup";
 import { Logo } from "./components/Logo";
 import { Feed } from "./components/scenes/Feed";
 import { ArtistPage } from "./components/scenes/ArtistPage";
+import { TrackPage } from "./components/scenes/TrackPage";
 import { Me } from "./components/scenes/Me";
 import { darkColorString, lightColorString } from "./util/theme";
 import { Link } from "./components/Link";
@@ -101,6 +102,7 @@ function App() {
         <Routes>
           <Route path="/" element={<>{showSetup ? <Setup /> : <Feed />}</>} />
           <Route path="/artist/:userName" element={<ArtistPage />} />
+          <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
           <Route path="/me" element={<Me />} />
         </Routes>
       </Content>

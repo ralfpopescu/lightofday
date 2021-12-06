@@ -9,4 +9,7 @@ export interface PostType {
   completedness: number;
   inceptionDate: Date;
   createdAt: string;
+  user: {
+    userName: string;
+  };
 }

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Completion } from "../../Completion";
 import { Player } from "../../Player";
 import format from "date-fns/format";
+import { Link } from "../../Link";
 
 const Container = styled.div`
   display: grid;
@@ -26,10 +27,8 @@ const Area = styled.div<AreaProps>`
 `;
 
 const Header = styled.div`
-  font-weight: 600;
   text-align: left;
-  width: 100%;
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const Table = styled.div`
@@ -64,13 +63,36 @@ type PostProps = {
   story: string;
   title: string;
   inceptionDate: Date;
+  author?: string;
+  showAuthor?: boolean;
 };
 
-export const Post = ({ id, completedness, trackId, story, title, inceptionDate }: PostProps) => {
+export const Post = ({
+  id,
+  completedness,
+  trackId,
+  story,
+  title,
+  inceptionDate,
+  author,
+  showAuthor,
+}: PostProps) => {
   return (
     <Container>
       <Area area="header">
-        <Header>{title}</Header>
+        <Link to={`/artist/${author}/${id}`} style={{ width: "100%", textDecoration: "underline" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              flexDirection: "row",
+              width: "100%",
+            }}
+          >
+            {showAuthor && <Header style={{ fontStyle: "italic" }}>{author}/</Header>}
+            <Header>{title}</Header>
+          </div>
+        </Link>
       </Area>
       <Area area="postDate">{dateFormat(inceptionDate)}</Area>
       <Area area="completion">

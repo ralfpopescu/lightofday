@@ -12,6 +12,7 @@ const Container = styled.div`
 const POSTS = gql`
   query GetPosts {
     me {
+      id
       userName
       posts {
         id
@@ -44,6 +45,7 @@ export const PostsList = () => {
           story={post.story}
           trackId={post.track.audiusTrackId}
           inceptionDate={new Date(post.inceptionDate)}
+          author={data.me.userName}
         />
       ))}
     </Container>
