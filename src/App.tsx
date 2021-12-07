@@ -38,7 +38,6 @@ const Header = styled.div`
   right: 0;
   display: grid;
   grid-template-rows: ${headerHeight}px auto;
-  grid-template-columns: audo 1fr 300px;
   grid-template-areas: "logo menu login";
   background-color: ${darkColorString};
   color: ${darkColorString};
@@ -59,6 +58,7 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #fbfbfb;
+  padding: 16px;
 `;
 
 const StyledLink = styled(Link)`

@@ -171,7 +171,7 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
             onClick={() => {
               setEditMode(true);
             }}
-            style={{ marginTop: "12px" }}
+            style={{ marginTop: "24px" }}
           >
             edit
           </Button>

@@ -12,6 +12,12 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+const PostContainer = styled.div`
+  display: grid;
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-gap: 20px;
+`;
+
 const FEED = gql`
   query GetFeed {
     feed {
@@ -42,7 +48,7 @@ const SubheaderContainer = styled.h2`
 `;
 
 const Message = () => (
-  <div style={{ maxWidth: "800px", paddingTop: "16px", paddingBottom: "16px" }}>
+  <div style={{ maxWidth: "800px", paddingTop: "16px", paddingBottom: "16px", display: "block" }}>
     An artists public catalogue is only the <Highlight>tip of the iceberg.</Highlight> There’s an
     enormous pressure to create high quality, on-brand art all the time, which takes a great deal of
     trial and error. Only a tiny fraction of these attempts will make the cut, leaving{" "}
@@ -75,18 +81,20 @@ export const Feed = () => {
         <Subheader>Latest lights</Subheader>
         <Line />
       </SubheaderContainer>
-      {data?.feed?.map((post: PostType) => (
-        <Post
-          id={post.id}
-          author={post.user?.userName}
-          completedness={post.completedness}
-          title={post.title}
-          story={post.story}
-          trackId={post.track.audiusTrackId}
-          inceptionDate={new Date(post.inceptionDate)}
-          showAuthor
-        />
-      ))}
+      <PostContainer>
+        {data?.feed?.map((post: PostType) => (
+          <Post
+            id={post.id}
+            author={post.user?.userName}
+            completedness={post.completedness}
+            title={post.title}
+            story={post.story}
+            trackId={post.track.audiusTrackId}
+            inceptionDate={new Date(post.inceptionDate)}
+            showAuthor
+          />
+        ))}
+      </PostContainer>
     </Container>
   );
 };

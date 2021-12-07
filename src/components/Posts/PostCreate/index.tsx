@@ -6,10 +6,22 @@ import { Button } from "../../Button";
 import { getAudius } from "../../../util/audius";
 import { AudiusTrackData } from "../../../types/audius";
 import { Select } from "../../Select";
+import { useMediaQuery } from "react-responsive";
 
-const Container = styled.div`
+const DesktopContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-gap: 20px;
+  border: 1px solid #ebebeb;
+  max-width: 1000px;
+  padding: 20px;
+  border-radius: 4px;
+`;
+
+const MobileContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
   grid-template-rows: repeat(auto-fill, 1fr);
   grid-gap: 20px;
   border: 1px solid #ebebeb;
@@ -59,6 +71,10 @@ export const PostCreate = () => {
   const [inceptionDate, setInceptionDate] = useState<string>("");
   const [postCreate, postCreateRequest] = useMutation(POST_CREATE);
 
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+
+  const Container = isTabletOrMobile ? MobileContainer : DesktopContainer;
+
   useEffect(() => {
     if (data?.me?.audiusUser) {
       const getTracks = async () => {
@@ -84,27 +100,38 @@ export const PostCreate = () => {
   return (
     <Container>
       <div>
-        title: <input value={story} onChange={(e) => setStory(e.target.value)} />
+        title: <input value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
       <div>
         track ID: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
-        <a href="https://audius.co/upload" target="_blank" rel="noreferrer">
-          upload on audius
-        </a>
       </div>
       <div style={{ display: "flex", alignItems: "flex-start" }}>
         story:{" "}
         <textarea
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={story}
+          onChange={(e) => setStory(e.target.value)}
           style={{ height: "100%" }}
         />
       </div>
-      <Select
-        activeValue={audiusTrackId}
-        options={tracksToOptions()}
-        onClick={(value) => setTrackId(value)}
-      />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <Button
+            naked
+            onClick={() => window.open("https://audius.co/upload")}
+            style={{ marginRight: "8px", marginBottom: "8px" }}
+          >
+            upload tracks
+          </Button>
+          <Button naked onClick={() => console.log()} style={{ marginBottom: "8px" }}>
+            refresh tracks
+          </Button>
+        </div>
+        <Select
+          activeValue={audiusTrackId}
+          options={tracksToOptions()}
+          onClick={(value) => setTrackId(value)}
+        />
+      </div>
       <div>
         completedness: <CompletednessSelector count={completedness} setCount={setCompletedness} />
       </div>

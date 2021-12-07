@@ -4,8 +4,9 @@ import { PostCreate } from "../../Posts/PostCreate";
 import { Setup } from "../../Setup";
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-gap: 20px;
 `;
 
 export const Me = () => {
