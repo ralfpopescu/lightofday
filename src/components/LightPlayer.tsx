@@ -124,7 +124,6 @@ export const LightPlayer = ({
             {...point}
             percent={passed / duration}
             onClick={() => {
-              console.log("hi");
               setStartLocation(Math.floor((i / points.length) * duration));
               onOuterCircleClick(i);
             }}

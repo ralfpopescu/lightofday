@@ -92,7 +92,6 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
 
   return (
     <Container>
-      {playingTrackId}
       <LightPlayer
         onClick={togglePlay}
         duration={duration}
@@ -103,12 +102,12 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
           if (audio) {
             setStartLocation(Math.floor((index / 15) * metadata?.data?.duration || 1));
             if (!playing) {
-              audio.play();
-              setPlaying(true);
+              setPlayingTrackId(postId);
             } else {
               audio.pause();
               audio.play();
               setPlaying(true);
+              setPlayingTrackId(postId);
             }
             reset();
           }
