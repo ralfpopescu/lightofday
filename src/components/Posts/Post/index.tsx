@@ -141,7 +141,7 @@ export const Post = ({
         </Table>
       </Area>
       <Area area="player">
-        <Player trackId={trackId} />
+        <Player trackId={trackId} postId={`${id}`} />
       </Area>
       <Area area="story">
         <Story>{story}</Story>

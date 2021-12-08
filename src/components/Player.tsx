@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useStopwatch } from "react-timer-hook";
 import { getAudius } from "../util/audius";
 import { LightPlayer } from "./LightPlayer";
+import { TrackContext } from "../App";
+import { useContext } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -11,7 +13,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-type PlayerProps = { trackId: string };
+type PlayerProps = { trackId: string; postId: string };
 
 const getTimeFromDuration = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
@@ -20,7 +22,8 @@ const getTimeFromDuration = (timeInSeconds: number) => {
   return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 };
 
-export const Player = ({ trackId }: PlayerProps) => {
+export const Player = ({ trackId, postId }: PlayerProps) => {
+  const { playingTrackId, setPlayingTrackId } = useContext(TrackContext);
   const [playing, setPlaying] = useState<boolean>(false);
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const [metadata, setMetadata] = useState<any>();
@@ -47,15 +50,11 @@ export const Player = ({ trackId }: PlayerProps) => {
     }
   }, [startLocation, audio]);
 
-  const togglePlay = () => {
-    if (audio && playing) {
-      audio.pause();
-      setPlaying(false);
-      setStartLocation((sl) => sl + elapsed);
-      reset();
-      pause();
-    } else {
-      if (audio) {
+  useEffect(() => {
+    console.log("triggered", postId);
+    if (audio) {
+      if (playingTrackId === postId && !playing) {
+        console.log("playing!");
         const playPromise = audio.play();
         if (playPromise !== undefined) {
           playPromise
@@ -67,7 +66,25 @@ export const Player = ({ trackId }: PlayerProps) => {
               console.log(error);
             });
         }
+      } else {
+        console.log("WE SHOULD PAUSE");
+        audio.pause();
+        setPlaying(false);
+        setStartLocation((sl) => sl + elapsed);
+        reset();
+        pause();
       }
+    }
+  }, [playingTrackId, audio]);
+
+  const togglePlay = () => {
+    console.log("toggled", { playingTrackId });
+    if (postId === playingTrackId) {
+      console.log("huh");
+      setPlayingTrackId("");
+    } else {
+      console.log("setting", { playingTrackId });
+      setPlayingTrackId(postId);
     }
   };
 
@@ -75,6 +92,7 @@ export const Player = ({ trackId }: PlayerProps) => {
 
   return (
     <Container>
+      {playingTrackId}
       <LightPlayer
         onClick={togglePlay}
         duration={duration}

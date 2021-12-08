@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import { Routes, Route } from "react-router-dom";
+import { useState, createContext } from "react";
 
 import { Login } from "./components/Login";
 import { Setup } from "./components/Setup";
@@ -77,36 +78,52 @@ const StyledIcon = styled(UserIcon)`
   }
 `;
 
+export const TrackContext = createContext<any>({
+  playingTrackId: "unset",
+  setPlayingTrackId: () => console.log("default"),
+});
+
 function App() {
   const { data, loading, error, refetch } = useQuery(ME);
+  const [playingTrackId, setPlayingTrackId] = useState<string>("");
 
   const showSetup = data?.me && (!data.me?.email || !data.me?.audiusUser || !data.me?.userName);
   return (
-    <div className="App">
-      <Header>
-        <Area area="logo">
-          <StyledLink to="/" secondary>
-            <Logo />
-            <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
-          </StyledLink>
-        </Area>
-        <Area area="menu"></Area>
-        <Area area="login">
-          <Link to="/me">
-            <StyledIcon />
-          </Link>
-          <Login refetch={refetch} />
-        </Area>
-      </Header>
-      <Content>
-        <Routes>
-          <Route path="/" element={<>{showSetup ? <Setup /> : <Feed />}</>} />
-          <Route path="/artist/:userName" element={<ArtistPage />} />
-          <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
-          <Route path="/me" element={<Me />} />
-        </Routes>
-      </Content>
-    </div>
+    <TrackContext.Provider
+      value={{
+        playingTrackId,
+        setPlayingTrackId: (track: string) => {
+          console.log({ track });
+          setPlayingTrackId(track);
+        },
+      }}
+    >
+      <div className="App">
+        <Header>
+          <Area area="logo">
+            <StyledLink to="/" secondary>
+              <Logo />
+              <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
+            </StyledLink>
+          </Area>
+          <Area area="menu"></Area>
+          <Area area="login">
+            <Link to="/me">
+              <StyledIcon />
+            </Link>
+            <Login refetch={refetch} />
+          </Area>
+        </Header>
+        <Content>
+          <Routes>
+            <Route path="/" element={<>{showSetup ? <Setup /> : <Feed />}</>} />
+            <Route path="/artist/:userName" element={<ArtistPage />} />
+            <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
+            <Route path="/me" element={<Me />} />
+          </Routes>
+        </Content>
+      </div>
+    </TrackContext.Provider>
   );
 }
 

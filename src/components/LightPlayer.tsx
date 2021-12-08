@@ -118,7 +118,6 @@ export const LightPlayer = ({
 }: LightPlayerProps) => {
   return (
     <Container>
-      {console.log({ duration, passed, percent: passed / duration })}
       <CircleContainer>
         {points.map((point, i) => (
           <Point

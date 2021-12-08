@@ -6,6 +6,8 @@ import { darkColorString, lightColorString } from "../../../util/theme";
 import { Subheader } from "../../Subheader";
 import { Line } from "../../Line";
 import { Artists } from "./Artists";
+import { TrackContext } from "../../../App";
+import { useContext } from "react";
 
 const Container = styled.div`
   display: flex;
