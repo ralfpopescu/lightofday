@@ -6,8 +6,6 @@ import { darkColorString, lightColorString } from "../../../util/theme";
 import { Subheader } from "../../Subheader";
 import { Line } from "../../Line";
 import { Artists } from "./Artists";
-import { TrackContext } from "../../../App";
-import { useContext } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -71,6 +69,8 @@ export const Feed = () => {
   if (loading) return <div>"Loading..."</div>;
   if (error) return <div>{error.message}</div>;
 
+  console.log("waaaa", data?.feed[0].createdAt);
+
   return (
     <Container>
       <Message />
@@ -93,6 +93,7 @@ export const Feed = () => {
             story={post.story}
             trackId={post.track.audiusTrackId}
             inceptionDate={new Date(post.inceptionDate)}
+            createdAt={new Date(parseInt(post.createdAt))}
             showAuthor
           />
         ))}

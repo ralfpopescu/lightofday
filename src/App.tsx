@@ -33,6 +33,7 @@ const ME = gql`
 const headerHeight = 100;
 
 const Header = styled.div`
+  z-index: 2;
   position: fixed;
   top: 0;
   left: 0;

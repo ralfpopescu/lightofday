@@ -58,6 +58,7 @@ export const TrackPage = () => {
             story={post.story}
             trackId={post.track.audiusTrackId}
             inceptionDate={new Date(post.inceptionDate)}
+            createdAt={new Date(parseInt(post.createdAt))}
           />
         ))}
     </Container>

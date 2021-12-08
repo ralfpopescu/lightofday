@@ -78,6 +78,7 @@ type PostProps = {
   inceptionDate: Date;
   author?: string;
   showAuthor?: boolean;
+  createdAt: Date;
 };
 
 const HeaderRow = styled.div`
@@ -97,6 +98,7 @@ export const Post = ({
   story,
   title,
   inceptionDate,
+  createdAt,
   author,
   showAuthor,
 }: PostProps) => {
@@ -126,10 +128,11 @@ export const Post = ({
         {isTabletOrMobile ? (
           <Table>
             {isTabletOrMobile && <AlignLeft>Posted:</AlignLeft>}
-            <AlignLeft>{dateFormat(inceptionDate)}</AlignLeft>
+            {console.log({ createdAt })}
+            <AlignLeft>{dateFormat(createdAt)}</AlignLeft>
           </Table>
         ) : (
-          <>{dateFormat(inceptionDate)}</>
+          <>{dateFormat(createdAt)}</>
         )}
       </Area>
       <Area area="completion">

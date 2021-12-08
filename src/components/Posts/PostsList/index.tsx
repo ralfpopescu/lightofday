@@ -46,6 +46,7 @@ export const PostsList = () => {
           trackId={post.track.audiusTrackId}
           inceptionDate={new Date(post.inceptionDate)}
           author={data.me.userName}
+          createdAt={new Date(parseInt(post.createdAt))}
         />
       ))}
     </Container>
