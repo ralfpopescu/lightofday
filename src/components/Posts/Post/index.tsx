@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRef } from "react";
 import { Completion } from "../../Completion";
 import { Player } from "../../Player";
 import format from "date-fns/format";
@@ -103,11 +104,12 @@ export const Post = ({
   showAuthor,
 }: PostProps) => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const scrollToRef = useRef<HTMLDivElement | null>(null);
 
   const Container = isTabletOrMobile ? MobileContainer : DesktopContainer;
 
   return (
-    <Container>
+    <Container ref={scrollToRef} style={{ scrollMargin: "100px" }}>
       <Area area="header">
         <Link to={`/artist/${author}/${id}`} style={{ width: "100%", textDecoration: "underline" }}>
           <HeaderRow
@@ -143,7 +145,10 @@ export const Post = ({
           </AlignLeft>
         </Table>
       </Area>
-      <Area area="player">
+      <Area
+        area="player"
+        onClick={() => scrollToRef?.current?.scrollIntoView({ behavior: "smooth" })}
+      >
         <Player trackId={trackId} postId={`${id}`} />
       </Area>
       <Area area="story">
