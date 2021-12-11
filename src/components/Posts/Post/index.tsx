@@ -8,7 +8,7 @@ import { Link } from "../../Link";
 import { ReactComponent as Heart } from "../../../assets/heart.svg";
 import { darkColorString, lightColorString } from "../../../util/theme";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { LikeType } from "../../../types";
+import { CommentType, LikeType } from "../../../types";
 
 const ME = gql`
   {
@@ -125,6 +125,7 @@ type PostProps = {
   showAuthor?: boolean;
   createdAt: Date;
   liked?: boolean;
+  comments: CommentType[];
 };
 
 const HeaderRow = styled.div`
@@ -169,6 +170,7 @@ export const Post = ({
   createdAt,
   author,
   showAuthor,
+  comments,
 }: PostProps) => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [like] = useMutation(LIKE);
@@ -227,7 +229,7 @@ export const Post = ({
       </Area>
       <Area area="likes">
         <Comments style={{ display: "flex", flexDirection: "row" }}>
-          <div>comments (0) </div>
+          <div>comments ({comments.length}) </div>
           <HeartIcon
             liked={!!liked}
             onClick={() => {

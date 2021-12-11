@@ -36,6 +36,9 @@ const POSTS = gql`
         inceptionDate
         createdAt
       }
+      comments {
+        id
+      }
     }
   }
 `;
@@ -105,6 +108,7 @@ export const ArtistPage = () => {
           createdAt={new Date(parseInt(post.createdAt))}
           author={userName}
           showAuthor={false}
+          comments={post.comments}
         />
       ))}
     </Container>

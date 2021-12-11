@@ -39,6 +39,9 @@ const FEED = gql`
           id
         }
       }
+      comments {
+        id
+      }
     }
   }
 `;
@@ -100,6 +103,7 @@ export const Feed = () => {
             trackId={post.track.audiusTrackId}
             inceptionDate={new Date(post.inceptionDate)}
             createdAt={new Date(parseInt(post.createdAt))}
+            comments={post.comments}
             showAuthor
           />
         ))}

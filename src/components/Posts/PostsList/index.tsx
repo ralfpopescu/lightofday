@@ -24,6 +24,9 @@ const POSTS = gql`
         title
         inceptionDate
         createdAt
+        comments {
+          id
+        }
       }
     }
   }
@@ -47,6 +50,7 @@ export const PostsList = () => {
           inceptionDate={new Date(post.inceptionDate)}
           author={data.me.userName}
           createdAt={new Date(parseInt(post.createdAt))}
+          comments={post.comments}
         />
       ))}
     </Container>

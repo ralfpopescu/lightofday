@@ -33,6 +33,9 @@ const POSTS = gql`
         title
         inceptionDate
         createdAt
+        comments {
+          id
+        }
       }
     }
   }
@@ -60,6 +63,7 @@ export const TrackPage = () => {
             trackId={post.track.audiusTrackId}
             inceptionDate={new Date(post.inceptionDate)}
             createdAt={new Date(parseInt(post.createdAt))}
+            comments={post.comments}
           />
         ))}
       <Comments />
