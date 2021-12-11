@@ -20,6 +20,7 @@ const DesktopContainer = styled.div`
   max-width: 1000px;
   padding: 20px;
   border-radius: 4px;
+  background-color: white;
 `;
 
 const MobileContainer = styled.div`
@@ -31,6 +32,7 @@ const MobileContainer = styled.div`
   max-width: 1000px;
   padding: 20px;
   border-radius: 4px;
+  background-color: white;
 `;
 
 const ME = gql`

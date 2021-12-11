@@ -33,6 +33,12 @@ const FEED = gql`
       user {
         userName
       }
+      likes {
+        id
+        liker {
+          id
+        }
+      }
     }
   }
 `;

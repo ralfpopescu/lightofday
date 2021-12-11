@@ -5,18 +5,62 @@ import { Player } from "../../Player";
 import format from "date-fns/format";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "../../Link";
+import { ReactComponent as Heart } from "../../../assets/heart.svg";
+import { darkColorString, lightColorString } from "../../../util/theme";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { LikeType } from "../../../types";
+
+const ME = gql`
+  {
+    me {
+      id
+      likes {
+        id
+        post {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const LIKE = gql`
+  mutation Like($input: LikeInput!) {
+    like(input: $input) {
+      liker {
+        id
+        likes {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const UNLIKE = gql`
+  mutation Unlike($input: LikeInput!) {
+    unlike(input: $input) {
+      liker {
+        id
+        likes {
+          id
+        }
+      }
+    }
+  }
+`;
 
 const DesktopContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: 40px 40px 40px 1fr;
+  grid-template-rows: 40px 40px 40px 1fr 40px;
   border: 1px solid #ebebeb;
   max-width: 1000px;
   padding: 20px;
   border-radius: 4px;
   background-color: white;
 
-  grid-template-areas: "header postDate" "completion player" "startDate player" "story player";
+  grid-template-areas: "header postDate" "completion player" "startDate player" "story player" "story likes";
 `;
 
 const MobileContainer = styled.div`
@@ -28,7 +72,7 @@ const MobileContainer = styled.div`
   border-radius: 4px;
   background-color: white;
 
-  grid-template-areas: "header header" "postDate postDate" "completion completion" "startDate startDate" "story story" "player player";
+  grid-template-areas: "header header" "postDate postDate" "completion completion" "startDate startDate" "story story" "player player" "likes likes";
 `;
 
 type AreaProps = { area: string };
@@ -80,6 +124,7 @@ type PostProps = {
   author?: string;
   showAuthor?: boolean;
   createdAt: Date;
+  liked?: boolean;
 };
 
 const HeaderRow = styled.div`
@@ -90,6 +135,28 @@ const HeaderRow = styled.div`
   width: 100%;
   flex-direction: row;
   justify-content: flex-start;
+`;
+
+const Comments = styled.div`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const HeartIcon = styled(Heart)<{ liked: boolean }>`
+  cursor: pointer;
+  width: 20px;
+  margin-left: 20px;
+  fill: ${(props) => (props.liked ? lightColorString : darkColorString)};
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export const Post = ({
@@ -104,7 +171,11 @@ export const Post = ({
   showAuthor,
 }: PostProps) => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const [like] = useMutation(LIKE);
+  const [unlike] = useMutation(UNLIKE);
+  const { data } = useQuery(ME);
   const scrollToRef = useRef<HTMLDivElement | null>(null);
+  const liked = data?.me?.likes.map((like: LikeType) => like.post.id).includes(id);
 
   const Container = isTabletOrMobile ? MobileContainer : DesktopContainer;
 
@@ -153,6 +224,19 @@ export const Post = ({
       </Area>
       <Area area="story">
         <Story>{story}</Story>
+      </Area>
+      <Area area="likes">
+        <Comments style={{ display: "flex", flexDirection: "row" }}>
+          <div>comments (0) </div>
+          <HeartIcon
+            liked={!!liked}
+            onClick={() => {
+              const payload = { variables: { input: { postId: id } } };
+              if (!liked) like(payload);
+              else unlike(payload);
+            }}
+          />
+        </Comments>
       </Area>
       <Area area="startDate">
         <Table>

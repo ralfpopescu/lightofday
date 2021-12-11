@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import { Post } from "../../Posts/Post";
-import { PostType } from "../../../types";
+import { PostType, UserType } from "../../../types";
 import { useParams } from "react-router";
 import { Loader } from "../../Loader";
 import { Line } from "../../Line";
@@ -67,19 +67,29 @@ const ME = gql`
 export const ArtistPage = () => {
   let { userName } = useParams();
   const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
+  const { data: meData, loading: meLoading, error: meError } = useQuery(ME);
   const [follow] = useMutation(FOLLOW);
 
-  if (loading) return <Loader />;
-  if (error) return <div>{error.message}</div>;
+  if (loading || meLoading) return <Loader />;
+  if (error || meError)
+    return (
+      <div>
+        {error?.message}
+        {meError?.message}
+      </div>
+    );
+
+  const isFollowing = meData?.me.following.map((f: UserType) => f.id).includes(data?.user?.id);
 
   return (
     <Container>
       <div>
         <Subheader>{data?.user?.userName}</Subheader>
         <Button
+          secondary={isFollowing}
           onClick={() => follow({ variables: { input: { followingUserId: data?.user?.id } } })}
         >
-          follow
+          {isFollowing ? "following" : "follow"}
         </Button>
       </div>
       <div>{data?.user?.publicAddress}</div>

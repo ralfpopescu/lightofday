@@ -1,4 +1,5 @@
 export interface UserType {
+  id: string;
   userName: string;
 }
 
@@ -21,4 +22,10 @@ export interface CommentType {
   body: string;
   author: UserType;
   post: PostType;
+}
+
+export interface LikeType {
+  id: string;
+  post: PostType;
+  liker: UserType;
 }
