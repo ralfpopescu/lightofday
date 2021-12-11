@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import { Post } from "../../Posts/Post";
 import { PostType } from "../../../types";
 import { useParams } from "react-router";
 import { Loader } from "../../Loader";
 import { Line } from "../../Line";
+import { Button } from "../../Button";
 
 const Container = styled.div`
   display: grid;
@@ -20,8 +21,10 @@ const Subheader = styled.h2`
 const POSTS = gql`
   query GetUserPosts($input: GetUserInput!) {
     user(input: $input) {
+      id
       userName
       bio
+      publicAddress
       posts {
         id
         completedness
@@ -37,16 +40,49 @@ const POSTS = gql`
   }
 `;
 
+const FOLLOW = gql`
+  mutation Follow($input: FollowInput!) {
+    follow(input: $input) {
+      follower {
+        id
+        following {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const ME = gql`
+  query ArtistPageMe {
+    me {
+      id
+      following {
+        id
+      }
+    }
+  }
+`;
+
 export const ArtistPage = () => {
   let { userName } = useParams();
   const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
+  const [follow] = useMutation(FOLLOW);
 
   if (loading) return <Loader />;
   if (error) return <div>{error.message}</div>;
 
   return (
     <Container>
-      <Subheader>{data?.user?.userName}</Subheader>
+      <div>
+        <Subheader>{data?.user?.userName}</Subheader>
+        <Button
+          onClick={() => follow({ variables: { input: { followingUserId: data?.user?.id } } })}
+        >
+          follow
+        </Button>
+      </div>
+      <div>{data?.user?.publicAddress}</div>
       <Line />
       {data?.user?.posts.map((post: PostType) => (
         <Post
@@ -57,6 +93,8 @@ export const ArtistPage = () => {
           trackId={post.track.audiusTrackId}
           inceptionDate={new Date(post.inceptionDate)}
           createdAt={new Date(parseInt(post.createdAt))}
+          author={userName}
+          showAuthor={false}
         />
       ))}
     </Container>

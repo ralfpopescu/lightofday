@@ -10,6 +10,7 @@ import { Web3Provider } from "@ethersproject/providers";
 import { Web3ReactProvider } from "@web3-react/core";
 import { setContext } from "@apollo/client/link/context";
 import { BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:3002/graphql",
@@ -53,6 +54,7 @@ ReactDOM.render(
           <Web3ReactProvider getLibrary={getLibrary}>
             <GlobalStyle>
               <App />
+              <ToastContainer />
             </GlobalStyle>
           </Web3ReactProvider>
         </CookiesProvider>

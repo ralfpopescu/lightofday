@@ -1,3 +1,7 @@
+export interface UserType {
+  userName: string;
+}
+
 export interface PostType {
   id: number;
   userId: string;
@@ -9,7 +13,12 @@ export interface PostType {
   completedness: number;
   inceptionDate: Date;
   createdAt: string;
-  user: {
-    userName: string;
-  };
+  user: UserType;
+  comments: CommentType[];
+}
+
+export interface CommentType {
+  body: string;
+  author: UserType;
+  post: PostType;
 }

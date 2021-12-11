@@ -7,6 +7,9 @@ import { getAudius } from "../../../util/audius";
 import { AudiusTrackData } from "../../../types/audius";
 import { Select } from "../../Select";
 import { useMediaQuery } from "react-responsive";
+import DatePicker from "react-datepicker";
+
+import "./datepicker.css";
 
 const DesktopContainer = styled.div`
   display: grid;
@@ -65,10 +68,11 @@ export const PostCreate = () => {
   const { data, loading, error } = useQuery(ME);
   const [title, setTitle] = useState<string>("");
   const [story, setStory] = useState<string>("");
+  const [demo, setDemo] = useState<string>("");
   const [completedness, setCompletedness] = useState<number>(0);
   const [audiusTrackId, setTrackId] = useState<string>("");
   const [tracks, setTracks] = useState<AudiusTrackData[]>();
-  const [inceptionDate, setInceptionDate] = useState<string>("");
+  const [inceptionDate, setInceptionDate] = useState<Date | null>(null);
   const [postCreate, postCreateRequest] = useMutation(POST_CREATE);
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
@@ -97,6 +101,8 @@ export const PostCreate = () => {
     return [];
   };
 
+  const disabled = story === "" || title === "" || audiusTrackId === "";
+
   return (
     <Container>
       <div>
@@ -105,13 +111,21 @@ export const PostCreate = () => {
       <div>
         track ID: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
       </div>
-      <div style={{ display: "flex", alignItems: "flex-start" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
         story:{" "}
         <textarea
           value={story}
           onChange={(e) => setStory(e.target.value)}
           style={{ height: "100%" }}
         />
+        <div style={{ marginTop: "8px" }}>inception (optional)</div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          date:{" "}
+          <DatePicker selected={inceptionDate} onChange={(date: Date) => setInceptionDate(date)} />
+        </div>
+        <div style={{ display: "flex", flexDirection: "row", marginTop: "8px" }}>
+          demo: <input value={demo} onChange={(e) => setDemo(e.target.value)} />
+        </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -136,6 +150,7 @@ export const PostCreate = () => {
         completedness: <CompletednessSelector count={completedness} setCount={setCompletedness} />
       </div>
       <Button
+        disabled={disabled}
         onClick={() => {
           console.log({
             title,

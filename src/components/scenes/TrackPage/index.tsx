@@ -5,6 +5,7 @@ import { PostType } from "../../../types";
 import { useParams } from "react-router";
 import { Loader } from "../../Loader";
 import { Line } from "../../Line";
+import { Comments } from "./Comments";
 
 const Container = styled.div`
   display: grid;
@@ -61,6 +62,7 @@ export const TrackPage = () => {
             createdAt={new Date(parseInt(post.createdAt))}
           />
         ))}
+      <Comments />
     </Container>
   );
 };
