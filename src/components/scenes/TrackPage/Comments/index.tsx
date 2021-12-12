@@ -7,6 +7,7 @@ import { useParams } from "react-router";
 import { Loader } from "../../../Loader";
 import { Line } from "../../../Line";
 import { Button } from "../../../Button";
+import { useLoggedIn } from "../../../../util/use-logged-in";
 
 const Container = styled.div`
   display: grid;
@@ -74,6 +75,9 @@ export const Comments = () => {
   const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
   const [body, setBody] = useState<string>("");
   const [addComment] = useMutation(ADD_COMMENT);
+  const loggedIn = useLoggedIn();
+
+  if (!loggedIn) return <div>Sign up to comment.</div>;
 
   if (loading) return <Loader />;
   if (error) return <div>{error.message}</div>;

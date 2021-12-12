@@ -9,6 +9,7 @@ import { ReactComponent as Heart } from "../../../assets/heart.svg";
 import { darkColorString, lightColorString } from "../../../util/theme";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { CommentType, LikeType } from "../../../types";
+import { useLoggedIn } from "../../../util/use-logged-in";
 
 const ME = gql`
   {
@@ -104,7 +105,14 @@ const Story = styled.div`
   width: 320px;
 `;
 
-const dateFormat = (date: Date) => format(date, "MMM dd, yyyy");
+const dateFormat = (date: Date) => {
+  try {
+    return format(date, "MMM dd, yyyy");
+  } catch (e: any) {
+    console.log(e.message, { date });
+    return null;
+  }
+};
 
 const AlignLeft = styled.div`
   display: flex;
@@ -160,6 +168,12 @@ const HeartIcon = styled(Heart)<{ liked: boolean }>`
   }
 `;
 
+const HeartIconStatic = styled(Heart)`
+  width: 20px;
+  margin-left: 20px;
+  fill: ${darkColorString};
+`;
+
 export const Post = ({
   id,
   completedness,
@@ -178,6 +192,7 @@ export const Post = ({
   const { data } = useQuery(ME);
   const scrollToRef = useRef<HTMLDivElement | null>(null);
   const liked = data?.me?.likes.map((like: LikeType) => like.post.id).includes(id);
+  const loggedIn = useLoggedIn();
 
   const Container = isTabletOrMobile ? MobileContainer : DesktopContainer;
 
@@ -229,15 +244,19 @@ export const Post = ({
       </Area>
       <Area area="likes">
         <Comments style={{ display: "flex", flexDirection: "row" }}>
-          <div>comments ({comments.length}) </div>
-          <HeartIcon
-            liked={!!liked}
-            onClick={() => {
-              const payload = { variables: { input: { postId: id } } };
-              if (!liked) like(payload);
-              else unlike(payload);
-            }}
-          />
+          <Link to={`/artist/${author}/${id}`}>comments ({comments.length}) </Link>
+          {loggedIn ? (
+            <HeartIcon
+              liked={!!liked}
+              onClick={() => {
+                const payload = { variables: { input: { postId: id } } };
+                if (!liked) like(payload);
+                else unlike(payload);
+              }}
+            />
+          ) : (
+            <HeartIconStatic />
+          )}
         </Comments>
       </Area>
       <Area area="startDate">

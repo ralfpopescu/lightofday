@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { PostsList } from "../../Posts/PostsList";
 import { PostCreate } from "../../Posts/PostCreate";
 import { Setup } from "../../Setup";
+import { useLoggedIn } from "../../../util/use-logged-in";
+import { Navigate } from "react-router-dom";
 
 const Container = styled.div`
   display: grid;
@@ -10,6 +12,10 @@ const Container = styled.div`
 `;
 
 export const Me = () => {
+  const loggedIn = useLoggedIn();
+
+  if (!loggedIn) return <Navigate replace to="/" />;
+
   return (
     <Container>
       <Setup />

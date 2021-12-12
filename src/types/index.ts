@@ -12,7 +12,7 @@ export interface PostType {
     audiusTrackId: string;
   };
   completedness: number;
-  inceptionDate: Date;
+  inceptionDate: string;
   createdAt: string;
   user: UserType;
   comments: CommentType[];

@@ -6,6 +6,7 @@ import { darkColorString, lightColorString } from "../../../util/theme";
 import { Subheader } from "../../Subheader";
 import { Line } from "../../Line";
 import { Artists } from "./Artists";
+import { Loader } from "../../Loader";
 
 const Container = styled.div`
   display: flex;
@@ -75,10 +76,8 @@ const Message = () => (
 export const Feed = () => {
   const { data, loading, error } = useQuery(FEED);
 
-  if (loading) return <div>"Loading..."</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error.message}</div>;
-
-  console.log("waaaa", data?.feed[0].createdAt);
 
   return (
     <Container>
@@ -101,7 +100,7 @@ export const Feed = () => {
             title={post.title}
             story={post.story}
             trackId={post.track.audiusTrackId}
-            inceptionDate={new Date(post.inceptionDate)}
+            inceptionDate={new Date(parseInt(post.inceptionDate))}
             createdAt={new Date(parseInt(post.createdAt))}
             comments={post.comments}
             showAuthor

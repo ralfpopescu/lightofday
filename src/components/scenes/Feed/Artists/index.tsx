@@ -3,6 +3,7 @@ import { useQuery, gql } from "@apollo/client";
 import { darkColorString, lightColorString } from "../../../../util/theme";
 import { Point } from "../../../Point";
 import { Link } from "../../../Link";
+import { Loader } from "../../../Loader";
 
 const Container = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const ArtistContainer = styled(Link)`
 export const Artists = () => {
   const { data, loading, error } = useQuery(USERS);
 
-  if (loading) return <div>"Loading..."</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error.message}</div>;
 
   return (

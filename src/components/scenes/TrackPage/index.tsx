@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { Loader } from "../../Loader";
 import { Line } from "../../Line";
 import { Comments } from "./Comments";
+import { Link } from "../../Link";
 
 const Container = styled.div`
   display: grid;
@@ -16,12 +17,14 @@ const Container = styled.div`
 const Subheader = styled.h2`
   margin: 0;
   font-size: 20px;
+  align-text: left;
 `;
 
 const POSTS = gql`
   query GetUserPosts($input: GetUserInput!) {
     user(input: $input) {
       userName
+      publicAddress
       bio
       posts {
         id
@@ -50,7 +53,10 @@ export const TrackPage = () => {
 
   return (
     <Container>
-      <Subheader>{data?.user?.userName}</Subheader>
+      <Link to={`/artist/${userName}`} style={{ justifyContent: "flex-start" }}>
+        <Subheader>{data?.user?.userName}</Subheader>
+      </Link>
+      <div>{data?.user?.publicAddress}</div>
       <Line />
       {data?.user?.posts
         .filter((post: PostType) => `${post.id}` === trackId)
@@ -61,7 +67,7 @@ export const TrackPage = () => {
             title={post.title}
             story={post.story}
             trackId={post.track.audiusTrackId}
-            inceptionDate={new Date(post.inceptionDate)}
+            inceptionDate={new Date(parseInt(post.inceptionDate))}
             createdAt={new Date(parseInt(post.createdAt))}
             comments={post.comments}
           />

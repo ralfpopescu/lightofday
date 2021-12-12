@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { Loader } from "../../Loader";
 import { Line } from "../../Line";
 import { Button } from "../../Button";
+import { useLoggedIn } from "../../../util/use-logged-in";
 
 const Container = styled.div`
   display: grid;
@@ -35,9 +36,9 @@ const POSTS = gql`
         title
         inceptionDate
         createdAt
-      }
-      comments {
-        id
+        comments {
+          id
+        }
       }
     }
   }
@@ -72,6 +73,7 @@ export const ArtistPage = () => {
   const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
   const { data: meData, loading: meLoading, error: meError } = useQuery(ME);
   const [follow] = useMutation(FOLLOW);
+  const loggedIn = useLoggedIn();
 
   if (loading || meLoading) return <Loader />;
   if (error || meError)
@@ -82,34 +84,38 @@ export const ArtistPage = () => {
       </div>
     );
 
-  const isFollowing = meData?.me.following.map((f: UserType) => f.id).includes(data?.user?.id);
+  const isFollowing = meData?.me?.following.map((f: UserType) => f.id).includes(data?.user?.id);
 
   return (
     <Container>
       <div>
         <Subheader>{data?.user?.userName}</Subheader>
-        <Button
-          secondary={isFollowing}
-          onClick={() => follow({ variables: { input: { followingUserId: data?.user?.id } } })}
-        >
-          {isFollowing ? "following" : "follow"}
-        </Button>
+        {loggedIn && (
+          <Button
+            secondary={isFollowing}
+            onClick={() => follow({ variables: { input: { followingUserId: data?.user?.id } } })}
+          >
+            {isFollowing ? "following" : "follow"}
+          </Button>
+        )}
       </div>
       <div>{data?.user?.publicAddress}</div>
       <Line />
       {data?.user?.posts.map((post: PostType) => (
-        <Post
-          id={post.id}
-          completedness={post.completedness}
-          title={post.title}
-          story={post.story}
-          trackId={post.track.audiusTrackId}
-          inceptionDate={new Date(post.inceptionDate)}
-          createdAt={new Date(parseInt(post.createdAt))}
-          author={userName}
-          showAuthor={false}
-          comments={post.comments}
-        />
+        <>
+          <Post
+            id={post.id}
+            completedness={post.completedness}
+            title={post.title}
+            story={post.story}
+            trackId={post.track.audiusTrackId}
+            inceptionDate={new Date(parseInt(post.inceptionDate))}
+            createdAt={new Date(parseInt(post.createdAt))}
+            author={userName}
+            showAuthor={false}
+            comments={post.comments}
+          />
+        </>
       ))}
     </Container>
   );

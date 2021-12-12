@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import { Post } from "../Post";
 import { PostType } from "../../../types";
+import { Loader } from "../../Loader";
 
 const Container = styled.div`
   display: grid;
@@ -35,23 +36,25 @@ const POSTS = gql`
 export const PostsList = () => {
   const { data, loading, error } = useQuery(POSTS);
 
-  if (loading) return <div>"Loading..."</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error.message}</div>;
 
   return (
     <Container>
       {data?.me?.posts.map((post: PostType) => (
-        <Post
-          id={post.id}
-          completedness={post.completedness}
-          title={post.title}
-          story={post.story}
-          trackId={post.track.audiusTrackId}
-          inceptionDate={new Date(post.inceptionDate)}
-          author={data.me.userName}
-          createdAt={new Date(parseInt(post.createdAt))}
-          comments={post.comments}
-        />
+        <>
+          <Post
+            id={post.id}
+            completedness={post.completedness}
+            title={post.title}
+            story={post.story}
+            trackId={post.track.audiusTrackId}
+            inceptionDate={new Date(parseInt(post.inceptionDate))}
+            author={data.me.userName}
+            createdAt={new Date(parseInt(post.createdAt))}
+            comments={post.comments}
+          />
+        </>
       ))}
     </Container>
   );
