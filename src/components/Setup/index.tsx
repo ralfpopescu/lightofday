@@ -31,6 +31,7 @@ const ME = gql`
       id
       email
       userName
+      bio
       audiusUser {
         id
       }
@@ -44,6 +45,7 @@ const USER_UPDATE = gql`
       id
       email
       userName
+      bio
       audiusUser {
         id
       }
@@ -62,6 +64,7 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
   const [editMode, setEditMode] = useState<boolean>(isSetup);
   const [query, setQuery] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [response, setResponse] = useState<{ data: AudiusUserData[] }>();
   const [audiusUser, setAudiusUser] = useState<{ name: string; id: string }>();
@@ -70,6 +73,7 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
   useEffect(() => {
     if (data && data.me) {
       if (data.me.email) setEmail(data.me.email);
+      if (data.me.bio) setBio(data.me.bio);
       if (data.me.userName) setUserName(data.me.userName);
       if (data.me.audiusUser) setAudiusUser({ id: data.me.audiusUser.id, name: "" });
     }
@@ -114,6 +118,17 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
         />
       ) : (
         <Highlight>{userName}</Highlight>
+      )}
+      {(bio || editMode) && <Section>Bio:</Section>}
+      {editMode ? (
+        <textarea
+          value={bio}
+          onChange={(e: any) => setBio(e.target.value)}
+          name="bio"
+          autoComplete="none"
+        />
+      ) : (
+        <>{bio && <Highlight>{bio}</Highlight>}</>
       )}
       <Section>Audius artist ID:</Section>
       {!data?.me?.audiusUser || editMode ? (

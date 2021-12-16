@@ -8,6 +8,8 @@ import { Loader } from "../../../Loader";
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  gap: 12px;
+  overflow-x: scroll;
 `;
 
 const USERS = gql`

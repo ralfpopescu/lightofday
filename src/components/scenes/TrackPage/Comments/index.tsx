@@ -86,7 +86,7 @@ export const Comments = () => {
 
   return (
     <Container>
-      <input type="textarea" value={body} onChange={(e) => setBody(e.target.value)} />
+      <textarea value={body} onChange={(e) => setBody(e.target.value)} />
       <Button
         disabled={body === ""}
         onClick={() => {
