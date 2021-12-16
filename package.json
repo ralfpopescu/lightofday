@@ -65,6 +65,7 @@
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.6",
     "@types/react-datepicker": "^4.3.2",
+    "@types/react-responsive": "^8.0.4",
     "@types/styled-components": "^5.1.15"
   }
 }
