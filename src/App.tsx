@@ -89,6 +89,7 @@ function App() {
   const [playingTrackId, setPlayingTrackId] = useState<string>("");
 
   const showSetup = data?.me && (!data.me?.email || !data.me?.audiusUser || !data.me?.userName);
+  console.log({ showSetup, data });
   return (
     <TrackContext.Provider
       value={{
@@ -117,7 +118,7 @@ function App() {
         </Header>
         <Content>
           <Routes>
-            <Route path="/" element={<>{showSetup ? <Setup /> : <Feed />}</>} />
+            <Route path="/" element={<>{showSetup ? <Setup isSetup /> : <Feed />}</>} />
             <Route path="/artist/:userName" element={<ArtistPage />} />
             <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
             <Route path="/me" element={<Me />} />

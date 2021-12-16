@@ -118,7 +118,13 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
       <Section>Audius artist ID:</Section>
       {!data?.me?.audiusUser || editMode ? (
         <>
-          {data?.me?.audiusUser && <input value={audiusUser?.id} />}
+          {data?.me?.audiusUser && (
+            <input
+              value={audiusUser?.id}
+              disabled
+              placeholder="Search Audius artists to find your ID"
+            />
+          )}
           <Section style={{ display: "flex", marginBottom: "16px" }}>
             <div style={{ marginRight: "8px" }}>Search Audius artists:</div>
             <DebounceInput
@@ -156,15 +162,17 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
             >
               save
             </Button>
-            <Button
-              naked
-              onClick={() => {
-                setEditMode(false);
-              }}
-              style={{ marginTop: "12px" }}
-            >
-              cancel
-            </Button>
+            {!isSetup && (
+              <Button
+                naked
+                onClick={() => {
+                  setEditMode(false);
+                }}
+                style={{ marginTop: "12px" }}
+              >
+                cancel
+              </Button>
+            )}
           </>
         ) : (
           <Button

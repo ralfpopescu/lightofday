@@ -41,21 +41,23 @@ export const PostsList = () => {
 
   return (
     <Container>
-      {data?.me?.posts.map((post: PostType) => (
-        <>
-          <Post
-            id={post.id}
-            completedness={post.completedness}
-            title={post.title}
-            story={post.story}
-            trackId={post.track.audiusTrackId}
-            inceptionDate={new Date(parseInt(post.inceptionDate))}
-            author={data.me.userName}
-            createdAt={new Date(parseInt(post.createdAt))}
-            comments={post.comments}
-          />
-        </>
-      ))}
+      {data?.me?.posts
+        .map((post: PostType) => (
+          <>
+            <Post
+              id={post.id}
+              completedness={post.completedness}
+              title={post.title}
+              story={post.story}
+              trackId={post.track.audiusTrackId}
+              inceptionDate={new Date(parseInt(post.inceptionDate))}
+              author={data.me.userName}
+              createdAt={new Date(parseInt(post.createdAt))}
+              comments={post.comments}
+            />
+          </>
+        ))
+        .reverse()}
     </Container>
   );
 };

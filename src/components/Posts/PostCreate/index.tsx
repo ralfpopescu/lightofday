@@ -52,6 +52,7 @@ const POST_CREATE = gql`
       id
       completedness
       user {
+        id
         posts {
           id
         }
@@ -108,25 +109,33 @@ export const PostCreate = () => {
   return (
     <Container>
       <div>
-        title: <input value={title} onChange={(e) => setTitle(e.target.value)} />
+        title:{" "}
+        <input value={title} onChange={(e) => setTitle(e.target.value)} style={{ width: "100%" }} />
       </div>
       <div>
-        track ID: <input value={audiusTrackId} onChange={(e) => setTrackId(e.target.value)} />
+        track ID:{" "}
+        <input
+          value={audiusTrackId}
+          onChange={(e) => setTrackId(e.target.value)}
+          placeholder="Select track to set"
+          disabled
+          style={{ width: "100%" }}
+        />
       </div>
       <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column" }}>
         story:{" "}
         <textarea
           value={story}
           onChange={(e) => setStory(e.target.value)}
-          style={{ height: "100%" }}
+          style={{ height: "100%", width: "100%" }}
         />
-        <div style={{ marginTop: "8px" }}>inception (optional)</div>
+        <div style={{ marginTop: "8px", marginBottom: "8px" }}>inception (optional)</div>
         <div style={{ display: "flex", flexDirection: "row" }}>
           date:{" "}
           <DatePicker selected={inceptionDate} onChange={(date: Date) => setInceptionDate(date)} />
         </div>
         <div style={{ display: "flex", flexDirection: "row", marginTop: "8px" }}>
-          demo: <input value={demo} onChange={(e) => setDemo(e.target.value)} />
+          soundcloud link to demo: <input value={demo} onChange={(e) => setDemo(e.target.value)} />
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -134,11 +143,11 @@ export const PostCreate = () => {
           <Button
             naked
             onClick={() => window.open("https://audius.co/upload")}
-            style={{ marginRight: "8px", marginBottom: "8px" }}
+            style={{ marginRight: "8px", marginBottom: "8px", flexGrow: 1 }}
           >
             upload tracks
           </Button>
-          <Button naked onClick={() => console.log()} style={{ marginBottom: "8px" }}>
+          <Button naked onClick={() => console.log()} style={{ marginBottom: "8px", flexGrow: 1 }}>
             refresh tracks
           </Button>
         </div>

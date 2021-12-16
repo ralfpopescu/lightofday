@@ -113,11 +113,11 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
           }
         }}
       />
-      {metadata && (
-        <div style={{ paddingTop: "8px" }}>
-          {getTimeFromDuration(startLocation + elapsed)} / {getTimeFromDuration(duration)}
-        </div>
-      )}
+      <div style={{ paddingTop: "8px" }}>
+        {metadata
+          ? `${getTimeFromDuration(startLocation + elapsed)} / ${getTimeFromDuration(duration)}`
+          : "0:00 / 0:00"}
+      </div>
     </Container>
   );
 };
