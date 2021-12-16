@@ -85,7 +85,7 @@ export const TrackContext = createContext<any>({
 });
 
 function App() {
-  const { data, loading, error, refetch } = useQuery(ME);
+  const { data, refetch } = useQuery(ME);
   const [playingTrackId, setPlayingTrackId] = useState<string>("");
 
   const showSetup = data?.me && (!data.me?.email || !data.me?.audiusUser || !data.me?.userName);

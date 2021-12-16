@@ -75,6 +75,7 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
         pause();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playingTrackId, audio]);
 
   const togglePlay = () => {

@@ -68,7 +68,7 @@ const POST_CREATE = gql`
 `;
 
 export const PostCreate = () => {
-  const { data, loading, error } = useQuery(ME);
+  const { data } = useQuery(ME);
   const [title, setTitle] = useState<string>("");
   const [story, setStory] = useState<string>("");
   const [demo, setDemo] = useState<string>("");
@@ -76,7 +76,7 @@ export const PostCreate = () => {
   const [audiusTrackId, setTrackId] = useState<string>("");
   const [tracks, setTracks] = useState<AudiusTrackData[]>();
   const [inceptionDate, setInceptionDate] = useState<Date | null>(null);
-  const [postCreate, postCreateRequest] = useMutation(POST_CREATE);
+  const [postCreate] = useMutation(POST_CREATE);
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 

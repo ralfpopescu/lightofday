@@ -10,8 +10,7 @@ import { Highlight } from "../Highlight";
 import { Subheader } from "../Subheader";
 import { Line } from "../Line";
 
-const validateEmail = (email: string) =>
-  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+const validateEmail = (email: string) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +67,7 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
   const [userName, setUserName] = useState<string>("");
   const [response, setResponse] = useState<{ data: AudiusUserData[] }>();
   const [audiusUser, setAudiusUser] = useState<{ name: string; id: string }>();
-  const [userUpdate, userUpdateRequest] = useMutation(USER_UPDATE);
+  const [userUpdate] = useMutation(USER_UPDATE);
 
   useEffect(() => {
     if (data && data.me) {

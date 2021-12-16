@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { Post } from "../../../Posts/Post";
 import { PostType, CommentType } from "../../../../types";
 import { useParams } from "react-router";
 import { Loader } from "../../../Loader";
-import { Line } from "../../../Line";
 import { Button } from "../../../Button";
 import { useLoggedIn } from "../../../../util/use-logged-in";
 
@@ -13,11 +11,6 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: repeat(auto-fill, 1fr);
   grid-gap: 20px;
-`;
-
-const Subheader = styled.h2`
-  margin: 0;
-  font-size: 20px;
 `;
 
 const POSTS = gql`
