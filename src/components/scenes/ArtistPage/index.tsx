@@ -57,6 +57,19 @@ const FOLLOW = gql`
   }
 `;
 
+const UNFOLLOW = gql`
+  mutation Unfollow($input: FollowInput!) {
+    unfollow(input: $input) {
+      follower {
+        id
+        following {
+          id
+        }
+      }
+    }
+  }
+`;
+
 const ME = gql`
   query ArtistPageMe {
     me {
@@ -71,8 +84,9 @@ const ME = gql`
 export const ArtistPage = () => {
   let { userName } = useParams();
   const { data, loading, error } = useQuery(POSTS, { variables: { input: { userName } } });
-  const { data: meData, loading: meLoading, error: meError } = useQuery(ME);
+  const { data: meData, loading: meLoading, error: meError, refetch } = useQuery(ME);
   const [follow] = useMutation(FOLLOW);
+  const [unfollow] = useMutation(UNFOLLOW);
   const loggedIn = useLoggedIn();
 
   if (loading || meLoading) return <Loader />;
@@ -93,7 +107,14 @@ export const ArtistPage = () => {
         {loggedIn && (
           <Button
             secondary={isFollowing}
-            onClick={() => follow({ variables: { input: { followingUserId: data?.user?.id } } })}
+            onClick={() => {
+              if (isFollowing) {
+                unfollow({ variables: { input: { followingUserId: data?.user?.id } } });
+              } else {
+                follow({ variables: { input: { followingUserId: data?.user?.id } } });
+              }
+              refetch();
+            }}
           >
             {isFollowing ? "following" : "follow"}
           </Button>
