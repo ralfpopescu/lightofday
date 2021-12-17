@@ -127,7 +127,7 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
           autoComplete="none"
         />
       ) : (
-        <>{bio && <Highlight>{bio}</Highlight>}</>
+        <>{bio && <Highlight style={{ maxWidth: "800px" }}>{bio}</Highlight>}</>
       )}
       <Section>Audius artist ID:</Section>
       {!data?.me?.audiusUser || editMode ? (
@@ -164,10 +164,9 @@ export const Setup = ({ isSetup = false }: SetupProps) => {
             <Button
               disabled={!validateEmail(email) || !audiusUser || userName === ""}
               onClick={async () => {
-                console.log({ email, audiusUser });
                 if (email && audiusUser && userName) {
                   await userUpdate({
-                    variables: { input: { email, audiusUserId: audiusUser.id, userName } },
+                    variables: { input: { email, audiusUserId: audiusUser.id, userName, bio } },
                   });
                   setEditMode(false);
                 }

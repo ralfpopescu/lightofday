@@ -63,6 +63,10 @@ const Content = styled.div`
   padding: 16px;
 `;
 
+const ContentWrapper = styled.div`
+  max-width: 800px;
+`;
+
 const StyledLink = styled(Link)`
   color: ${lightColorString};
 `;
@@ -117,12 +121,14 @@ function App() {
           </Area>
         </Header>
         <Content>
-          <Routes>
-            <Route path="/" element={<>{showSetup ? <Setup isSetup /> : <Feed />}</>} />
-            <Route path="/artist/:userName" element={<ArtistPage />} />
-            <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
-            <Route path="/me" element={<Me />} />
-          </Routes>
+          <ContentWrapper>
+            <Routes>
+              <Route path="/" element={<>{showSetup ? <Setup isSetup /> : <Feed />}</>} />
+              <Route path="/artist/:userName" element={<ArtistPage />} />
+              <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
+              <Route path="/me" element={<Me />} />
+            </Routes>
+          </ContentWrapper>
         </Content>
       </div>
     </TrackContext.Provider>

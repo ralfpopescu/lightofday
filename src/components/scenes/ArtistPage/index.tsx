@@ -100,6 +100,7 @@ export const ArtistPage = () => {
         )}
       </div>
       <div>{data?.user?.publicAddress}</div>
+      <div style={{ fontStyle: "italic", maxWidth: "800px" }}>{data?.user?.bio}</div>
       <Line />
       {data?.user?.posts.map((post: PostType) => (
         <>
