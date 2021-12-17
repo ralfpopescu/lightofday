@@ -1,4 +1,3 @@
-import { SetStateAction } from "react";
 import styled from "styled-components";
 
 const numberOfPoints = 15;

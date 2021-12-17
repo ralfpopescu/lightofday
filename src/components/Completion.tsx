@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { darkColor, lightColor, getColorFromArray } from "../util/theme";
 
-const size = 20;
-
 const Point = styled.div<{ active: boolean }>`
   border-radius: 50%;
   background-color: ${(props) =>
