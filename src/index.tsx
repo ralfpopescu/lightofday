@@ -13,8 +13,11 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { onError } from "@apollo/client/link/error";
 import { ToastContainer, toast } from "react-toastify";
 
+export const LOCAL_URI = "http://localhost:3002/graphql";
+export const PROD_URI = "https://light-of-day-backend-ugura.ondigitalocean.app/graphql";
+
 const httpLink = createHttpLink({
-  uri: "http://localhost:3002/graphql",
+  uri: PROD_URI,
 });
 
 const authLink = setContext((_, { headers }) => {
