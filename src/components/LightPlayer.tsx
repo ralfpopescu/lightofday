@@ -49,7 +49,7 @@ const Point = styled.div<PointType>`
   margin: -14px;
   cursor: pointer;
   align-items: center;
-  transition: all 0.5s ease-in-out;
+  transition: all 1s ease-in-out;
   justify-content: center;
   background-color: ${(props) => getColorFromArray(getPointColor(props.index, props.percent))};
   transform: translateY(${pointSize / 2}px) translateX(${pointSize / 2}px)
