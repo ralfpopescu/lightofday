@@ -5,6 +5,7 @@ import { getAudius } from "../util/audius";
 import { LightPlayer } from "./LightPlayer";
 import { TrackContext } from "../App";
 import { useContext } from "react";
+import { useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +31,8 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
   const [startLocation, setStartLocation] = useState<number>(0);
   const { seconds, minutes, start, pause, reset } = useStopwatch({ autoStart: false });
   const elapsed = seconds + minutes * 60;
+  const loc = useLocation();
+  const [renderedOnLocation] = useState<string>(loc.pathname);
 
   useEffect(() => {
     const getAudio = async () => {
@@ -51,10 +54,8 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
   }, [startLocation, audio]);
 
   useEffect(() => {
-    console.log("triggered", postId);
     if (audio) {
       if (playingTrackId === postId && !playing) {
-        console.log("playing!");
         const playPromise = audio.play();
         if (playPromise !== undefined) {
           playPromise
@@ -67,7 +68,6 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
             });
         }
       } else {
-        console.log("WE SHOULD PAUSE");
         audio.pause();
         setPlaying(false);
         setStartLocation((sl) => sl + elapsed);
@@ -77,6 +77,14 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playingTrackId, audio]);
+
+  useEffect(() => {
+    return () => {
+      setPlaying(false);
+      audio?.pause();
+      setPlayingTrackId("");
+    };
+  }, [loc.pathname, renderedOnLocation, audio]);
 
   const togglePlay = () => {
     console.log("toggled", { playingTrackId });
