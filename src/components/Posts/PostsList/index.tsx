@@ -24,6 +24,7 @@ const POSTS = gql`
         story
         title
         inceptionDate
+        inceptionDemo
         createdAt
         comments {
           id
@@ -51,6 +52,7 @@ export const PostsList = () => {
               story={post.story}
               trackId={post.track.audiusTrackId}
               inceptionDate={new Date(parseInt(post.inceptionDate))}
+              inceptionDemo={post.inceptionDemo}
               author={data.me.userName}
               createdAt={new Date(parseInt(post.createdAt))}
               comments={post.comments}

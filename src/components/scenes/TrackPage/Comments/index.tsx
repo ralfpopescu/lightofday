@@ -27,6 +27,7 @@ const POSTS = gql`
         story
         title
         inceptionDate
+        inceptionDemo
         createdAt
         comments {
           id

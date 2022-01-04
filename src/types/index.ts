@@ -13,6 +13,7 @@ export interface PostType {
   };
   completedness: number;
   inceptionDate: string;
+  inceptionDemo?: string;
   createdAt: string;
   user: UserType;
   comments: CommentType[];

@@ -132,6 +132,7 @@ export const ArtistPage = () => {
             story={post.story}
             trackId={post.track.audiusTrackId}
             inceptionDate={new Date(parseInt(post.inceptionDate))}
+            inceptionDemo={post.inceptionDemo}
             createdAt={new Date(parseInt(post.createdAt))}
             author={userName}
             showAuthor={false}

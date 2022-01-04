@@ -84,7 +84,7 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
       audio?.pause();
       setPlayingTrackId("");
     };
-  }, [loc.pathname, renderedOnLocation, audio]);
+  }, [loc.pathname, renderedOnLocation, audio, setPlayingTrackId]);
 
   const togglePlay = () => {
     console.log("toggled", { playingTrackId });

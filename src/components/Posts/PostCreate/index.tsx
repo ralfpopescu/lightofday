@@ -63,6 +63,7 @@ const POST_CREATE = gql`
       story
       title
       inceptionDate
+      inceptionDemo
     }
   }
 `;
@@ -71,7 +72,7 @@ export const PostCreate = () => {
   const { data } = useQuery(ME);
   const [title, setTitle] = useState<string>("");
   const [story, setStory] = useState<string>("");
-  const [demo, setDemo] = useState<string>("");
+  const [inceptionDemo, setDemo] = useState<string>("");
   const [completedness, setCompletedness] = useState<number>(0);
   const [audiusTrackId, setTrackId] = useState<string>("");
   const [tracks, setTracks] = useState<AudiusTrackData[]>();
@@ -135,7 +136,8 @@ export const PostCreate = () => {
           <DatePicker selected={inceptionDate} onChange={(date: Date) => setInceptionDate(date)} />
         </div>
         <div style={{ display: "flex", flexDirection: "row", marginTop: "8px" }}>
-          soundcloud link to demo: <input value={demo} onChange={(e) => setDemo(e.target.value)} />
+          soundcloud link to demo:{" "}
+          <input value={inceptionDemo} onChange={(e) => setDemo(e.target.value)} />
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -178,6 +180,7 @@ export const PostCreate = () => {
                 completedness,
                 audiusTrackId,
                 inceptionDate,
+                inceptionDemo,
               },
             },
           });

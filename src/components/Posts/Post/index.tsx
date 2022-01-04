@@ -129,6 +129,7 @@ type PostProps = {
   story: string;
   title: string;
   inceptionDate: Date;
+  inceptionDemo?: string;
   author?: string;
   showAuthor?: boolean;
   createdAt: Date;
@@ -181,6 +182,7 @@ export const Post = ({
   story,
   title,
   inceptionDate,
+  inceptionDemo,
   createdAt,
   author,
   showAuthor,
@@ -262,7 +264,17 @@ export const Post = ({
       <Area area="startDate">
         <Table>
           <AlignLeft>Inception:</AlignLeft>
-          <AlignLeft>{dateFormat(inceptionDate)}</AlignLeft>
+          <AlignLeft>
+            {inceptionDate ? dateFormat(inceptionDate) : "no inception date specified"}
+            {inceptionDemo && (
+              <div>
+                /{" "}
+                <a href={inceptionDemo} target="_blank" rel="noreferrer">
+                  demo
+                </a>
+              </div>
+            )}
+          </AlignLeft>
         </Table>
       </Area>
     </Container>
