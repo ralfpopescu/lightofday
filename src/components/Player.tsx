@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import styled from "styled-components";
 import { useStopwatch } from "react-timer-hook";
 import { getAudius } from "../util/audius";
@@ -23,7 +23,7 @@ const getTimeFromDuration = (timeInSeconds: number) => {
   return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 };
 
-export const Player = ({ trackId, postId }: PlayerProps) => {
+export const Player = memo(({ trackId, postId }: PlayerProps) => {
   const { playingTrackId, setPlayingTrackId } = useContext(TrackContext);
   const [playing, setPlaying] = useState<boolean>(false);
   const [audio, setAudio] = useState<HTMLAudioElement>();
@@ -32,7 +32,6 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
   const { seconds, minutes, start, pause, reset } = useStopwatch({ autoStart: false });
   const elapsed = seconds + minutes * 60;
   const loc = useLocation();
-  const [renderedOnLocation] = useState<string>(loc.pathname);
 
   useEffect(() => {
     const getAudio = async () => {
@@ -75,16 +74,12 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
         pause();
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playingTrackId, audio]);
-
-  useEffect(() => {
     return () => {
-      setPlaying(false);
-      audio?.pause();
-      setPlayingTrackId("");
-    };
-  }, [loc.pathname, renderedOnLocation, audio, setPlayingTrackId]);
+        setPlaying(false);
+        audio?.pause();
+      }
+      // eslint-disable-next-line
+  }, [playingTrackId, audio, loc]);
 
   const togglePlay = () => {
     console.log("toggled", { playingTrackId });
@@ -129,4 +124,4 @@ export const Player = ({ trackId, postId }: PlayerProps) => {
       </div>
     </Container>
   );
-};
+});
