@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { useMutation, useQuery, gql } from "@apollo/client";
@@ -32,15 +32,17 @@ export const Login = ({ refetch }: { refetch: () => void }) => {
 
   const nonceRequest = useQuery(GET_NONCE);
   const [login, loginRequest] = useMutation(LOGIN);
+  const [attempted, setAttempted] = useState<boolean>(false);
 
   useEffect(() => {
     const getWeb3 = async () => {
-      if (!library) {
+      if (!library && !attempted) {
         await provider.activate(new InjectedConnector({}));
+        setAttempted(true);
       }
     };
     getWeb3();
-  }, [library, provider]);
+  }, [library, provider, attempted]);
 
   useEffect(() => {
     if (loginRequest.data) {
