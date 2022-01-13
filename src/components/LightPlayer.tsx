@@ -38,19 +38,20 @@ const getPointColor = (index: number, percent: number): Color => {
   return darkColor;
 };
 
-const Point = styled.div<PointType>`
-  display: flex;
+const Point = styled.button<PointType>`
+  display: block;
   position: absolute;
   top: 50%;
   left: 50%;
   width: ${pointSize}px;
   height: ${pointSize}px;
-  border-radius: 50%;
+  border-radius: 100%;
   margin: -14px;
   cursor: pointer;
   align-items: center;
   transition: all 1s ease-in-out;
   justify-content: center;
+  border: none;
   background-color: ${(props) => getColorFromArray(getPointColor(props.index, props.percent))};
   transform: translateY(${pointSize / 2}px) translateX(${pointSize / 2}px)
     rotate(${(props) => props.angle}deg) translate(${circleSize / 2 - pointSize / 2}px);
@@ -82,11 +83,12 @@ const CircleContainer = styled.div`
   display: flex;
 `;
 
-const PlayButton = styled.div<{ onClick: () => void; playing: boolean }>`
+const PlayButton = styled.button<{ onClick: () => void; playing: boolean }>`
   z-index: 1;
   width: ${pointSize * 2}px;
   height: ${pointSize * 2}px;
   border-radius: 50%;
+  border: none;
   background-color: ${(props) =>
     props.playing ? getColorFromArray(lightColor) : getColorFromArray(darkColor)};
   cursor: pointer;
