@@ -14,7 +14,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-type PlayerProps = { trackId: string; postId: string };
+type PlayerProps = { trackId: string; postId: string; scrollIntoView?: () => void };
 
 const getTimeFromDuration = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
@@ -23,7 +23,7 @@ const getTimeFromDuration = (timeInSeconds: number) => {
   return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
 };
 
-export const Player = memo(({ trackId, postId }: PlayerProps) => {
+export const Player = memo(({ trackId, postId, scrollIntoView }: PlayerProps) => {
   const { playingTrackId, setPlayingTrackId } = useContext(TrackContext);
   const [playing, setPlaying] = useState<boolean>(false);
   const [audio, setAudio] = useState<HTMLAudioElement>();
@@ -75,13 +75,16 @@ export const Player = memo(({ trackId, postId }: PlayerProps) => {
       }
     }
     return () => {
-        setPlaying(false);
-        audio?.pause();
-      }
-      // eslint-disable-next-line
+      setPlaying(false);
+      audio?.pause();
+    };
+    // eslint-disable-next-line
   }, [playingTrackId, audio, loc]);
 
   const togglePlay = () => {
+    if (scrollIntoView) {
+      scrollIntoView();
+    }
     console.log("toggled", { playingTrackId });
     if (postId === playingTrackId) {
       console.log("huh");
