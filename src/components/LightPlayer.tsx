@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { useMediaQuery } from "react-responsive";
 
 const numberOfPoints = 15;
 const angle = 360 / numberOfPoints;
 const circleSize = 100;
 const pointSize = 12;
 
-type PointType = { index: number; angle: number; percent: number };
+type PointType = { index: number; angle: number; percent: number; isTabletOrMobile?: boolean };
 
 const points = new Array(numberOfPoints).fill(null).map((_, i) => ({ index: i, angle: i * angle }));
 
@@ -55,9 +56,13 @@ const Point = styled.div<PointType>`
   transform: translateY(${pointSize / 2}px) translateX(${pointSize / 2}px)
     rotate(${(props) => props.angle}deg) translate(${circleSize / 2 - pointSize / 2}px);
 
-  &:hover {
-    opacity: 0.7;
-  }
+  ${(props) =>
+    props.isTabletOrMobile
+      ? ""
+      : `&:hover {
+      transform: scale(1.1);
+      opacity: 0.7;
+    }`}
 `;
 
 const Container = styled.div`
@@ -82,7 +87,7 @@ const CircleContainer = styled.div`
   display: flex;
 `;
 
-const PlayButton = styled.div<{ onClick: () => void; playing: boolean }>`
+const PlayButton = styled.div<{ onClick: () => void; playing: boolean; isTabletOrMobile: boolean }>`
   z-index: 1;
   width: ${pointSize * 2}px;
   height: ${pointSize * 2}px;
@@ -92,10 +97,13 @@ const PlayButton = styled.div<{ onClick: () => void; playing: boolean }>`
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 
-  &:hover {
+  ${(props) =>
+    props.isTabletOrMobile
+      ? ""
+      : `&:hover {
     transform: scale(1.2);
     opacity: 0.7;
-  }
+  }`}
 `;
 
 type LightPlayerProps = {
@@ -115,12 +123,15 @@ export const LightPlayer = ({
   setStartLocation,
   onOuterCircleClick,
 }: LightPlayerProps) => {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+
   return (
     <Container>
       <CircleContainer>
         {points.map((point, i) => (
           <Point
             {...point}
+            isTabletOrMobile={isTabletOrMobile}
             percent={passed / duration}
             onClick={() => {
               setStartLocation(Math.floor((i / points.length) * duration));
@@ -129,7 +140,7 @@ export const LightPlayer = ({
           />
         ))}
       </CircleContainer>
-      <PlayButton onClick={onClick} playing={playing} />
+      <PlayButton onClick={onClick} playing={playing} isTabletOrMobile={isTabletOrMobile} />
     </Container>
   );
 };
