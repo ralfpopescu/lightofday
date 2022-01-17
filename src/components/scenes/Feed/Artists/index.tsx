@@ -6,10 +6,13 @@ import { Link } from "../../../Link";
 import { Loader } from "../../../Loader";
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  overflow-x: scroll;
+  display: grid;
+  grid-gap: 12px;
+  overflow: auto;
+  grid-template-rows: repeat(auto-fit, minmax(50px, 50px));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  min-height: 50px;
+  max-height: 112px;
 `;
 
 const USERS = gql`
