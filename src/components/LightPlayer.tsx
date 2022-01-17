@@ -60,7 +60,9 @@ const Point = styled.div<PointType>`
     props.isTabletOrMobile
       ? ""
       : `&:hover {
-      transform: scale(1.1);
+      transform: translateY(${pointSize / 2}px) translateX(${pointSize / 2}px)
+      rotate(${props.angle}deg) translate(${circleSize / 2 - pointSize / 2}px)
+      scale(1.1);
       opacity: 0.7;
     }`}
 `;
