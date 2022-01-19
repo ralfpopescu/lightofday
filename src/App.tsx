@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import { Routes, Route } from "react-router-dom";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 
 import { Login } from "./components/Login";
 import { Setup } from "./components/Setup";
@@ -13,6 +13,7 @@ import { Me } from "./components/scenes/Me";
 import { darkColorString, lightColorString } from "./util/theme";
 import { Link } from "./components/Link";
 import { ReactComponent as UserIcon } from "./assets/user.svg";
+import { getHost } from "./util/audius";
 
 const ME = gql`
   query RootMe {
@@ -88,9 +89,20 @@ export const TrackContext = createContext<any>({
   setPlayingTrackId: () => console.log("default"),
 });
 
+export const HostContext = createContext<string>("https://audius-metadata-1.figment.io");
+
 function App() {
   const { data, refetch } = useQuery(ME);
   const [playingTrackId, setPlayingTrackId] = useState<string>("");
+  const [host, setHost] = useState<string>("");
+
+  useEffect(() => {
+    const loadHost = async () => {
+      const loadedHost = await getHost();
+      setHost(loadedHost);
+    };
+    loadHost();
+  });
 
   const showSetup = data?.me && (!data.me?.email || !data.me?.audiusUser || !data.me?.userName);
   console.log({ showSetup, data });
@@ -104,33 +116,35 @@ function App() {
         },
       }}
     >
-      <div className="App">
-        <Header>
-          <Area area="logo">
-            <StyledLink to="/" secondary>
-              <Logo />
-              <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
-            </StyledLink>
-          </Area>
-          <Area area="menu"></Area>
-          <Area area="login">
-            <Link to="/me">
-              <StyledIcon />
-            </Link>
-            <Login refetch={refetch} />
-          </Area>
-        </Header>
-        <Content>
-          <ContentWrapper>
-            <Routes>
-              <Route path="/" element={<>{showSetup ? <Setup isSetup /> : <Feed />}</>} />
-              <Route path="/artist/:userName" element={<ArtistPage />} />
-              <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
-              <Route path="/me" element={<Me />} />
-            </Routes>
-          </ContentWrapper>
-        </Content>
-      </div>
+      <HostContext.Provider value={host}>
+        <div className="App">
+          <Header>
+            <Area area="logo">
+              <StyledLink to="/" secondary>
+                <Logo />
+                <div style={{ marginLeft: "8px", color: lightColorString }}>Light of day</div>
+              </StyledLink>
+            </Area>
+            <Area area="menu"></Area>
+            <Area area="login">
+              <Link to="/me">
+                <StyledIcon />
+              </Link>
+              <Login refetch={refetch} />
+            </Area>
+          </Header>
+          <Content>
+            <ContentWrapper>
+              <Routes>
+                <Route path="/" element={<>{showSetup ? <Setup isSetup /> : <Feed />}</>} />
+                <Route path="/artist/:userName" element={<ArtistPage />} />
+                <Route path="/artist/:userName/:trackId" element={<TrackPage />} />
+                <Route path="/me" element={<Me />} />
+              </Routes>
+            </ContentWrapper>
+          </Content>
+        </div>
+      </HostContext.Provider>
     </TrackContext.Provider>
   );
 }

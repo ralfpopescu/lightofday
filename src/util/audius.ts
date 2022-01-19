@@ -7,6 +7,10 @@ const defaultAppName = "light-of-day";
 const defaultHost = "https://audius-metadata-1.figment.io";
 
 export const getAudius = ({ appName = defaultAppName, host = defaultHost }: GetAudiusInput) => ({
+  getHost: async () => {
+    const hosts = await axios.get<{ data: string[] }>(`https://api.audius.co/`);
+    return hosts.data.data[0];
+  },
   stream: ({ trackId }: { trackId: string }) => {
     return axios.get(`${host}/v1/tracks/${trackId}/stream?app_name=${appName}`);
   },
@@ -26,3 +30,8 @@ export const getAudius = ({ appName = defaultAppName, host = defaultHost }: GetA
   streamUrl: ({ trackId }: { trackId: string }) =>
     `${host}/v1/tracks/${trackId}/stream?app_name=${appName}`,
 });
+
+export const getHost = async () => {
+  const hosts = await axios.get<{ data: string[] }>(`https://api.audius.co/`);
+  return hosts.data.data[0];
+};

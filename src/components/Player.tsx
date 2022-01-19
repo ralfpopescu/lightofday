@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useStopwatch } from "react-timer-hook";
 import { getAudius } from "../util/audius";
 import { LightPlayer } from "./LightPlayer";
-import { TrackContext } from "../App";
+import { TrackContext, HostContext } from "../App";
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -25,6 +25,7 @@ const getTimeFromDuration = (timeInSeconds: number) => {
 
 export const Player = memo(({ trackId, postId, scrollIntoView }: PlayerProps) => {
   const { playingTrackId, setPlayingTrackId } = useContext(TrackContext);
+  const host = useContext(HostContext);
   const [playing, setPlaying] = useState<boolean>(false);
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const [metadata, setMetadata] = useState<any>();
@@ -35,14 +36,14 @@ export const Player = memo(({ trackId, postId, scrollIntoView }: PlayerProps) =>
 
   useEffect(() => {
     const getAudio = async () => {
-      const audius = getAudius({});
+      const audius = getAudius({ host });
       const fetchedAudio = await audius.getTrack({ trackId });
       setMetadata(fetchedAudio.data);
       const streamUrl = audius.streamUrl({ trackId });
       setAudio(new Audio(streamUrl));
     };
     getAudio();
-  }, [trackId]);
+  }, [trackId, host]);
 
   useEffect(() => {
     if (audio) {
