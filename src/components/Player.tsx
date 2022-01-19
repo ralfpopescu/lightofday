@@ -103,7 +103,7 @@ export const Player = memo(({ trackId, postId, scrollIntoView }: PlayerProps) =>
       <LightPlayer
         onClick={togglePlay}
         duration={duration}
-        passed={startLocation + seconds}
+        passed={startLocation + elapsed}
         playing={playing}
         setStartLocation={setStartLocation}
         onOuterCircleClick={(index) => {

@@ -34,7 +34,7 @@ const ME = gql`
 const headerHeight = 100;
 
 const Header = styled.div`
-  z-index: 2;
+  z-index: 101;
   position: fixed;
   top: 0;
   left: 0;

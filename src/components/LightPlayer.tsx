@@ -90,7 +90,7 @@ const CircleContainer = styled.div`
 `;
 
 const PlayButton = styled.div<{ onClick: () => void; playing: boolean; isTabletOrMobile: boolean }>`
-  z-index: 1;
+  z-index: 100;
   width: ${pointSize * 2}px;
   height: ${pointSize * 2}px;
   border-radius: 50%;

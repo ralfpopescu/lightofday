@@ -245,11 +245,12 @@ export const Post = ({
           </AlignLeft>
         </Table>
       </Area>
-      <Area
-        area="player"
-        onClick={() => scrollToRef?.current?.scrollIntoView({ behavior: "smooth" })}
-      >
-        <Player trackId={trackId} postId={`${id}`} />
+      <Area area="player">
+        <Player
+          trackId={trackId}
+          postId={`${id}`}
+          scrollIntoView={() => scrollToRef?.current?.scrollIntoView({ behavior: "smooth" })}
+        />
       </Area>
       <Area area="story">
         <Story>{story}</Story>
