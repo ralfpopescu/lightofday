@@ -17,7 +17,7 @@ export const LOCAL_URI = "http://localhost:3002/graphql";
 export const PROD_URI = "https://light-of-day-backend-ugura.ondigitalocean.app/graphql";
 
 const httpLink = createHttpLink({
-  uri: PROD_URI,
+  uri: LOCAL_URI,
 });
 
 const authLink = setContext((_, { headers }) => {

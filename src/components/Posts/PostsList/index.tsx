@@ -56,6 +56,7 @@ export const PostsList = () => {
               author={data.me.userName}
               createdAt={new Date(parseInt(post.createdAt))}
               comments={post.comments}
+              editable
             />
           </>
         ))

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Completion } from "../../Completion";
 import { Player } from "../../Player";
 import format from "date-fns/format";
@@ -10,6 +10,8 @@ import { darkColorString, lightColorString } from "../../../util/theme";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { CommentType, LikeType } from "../../../types";
 import { useLoggedIn } from "../../../util/use-logged-in";
+import { Button } from "../../Button";
+import { PostUpdate } from "./PostUpdate";
 
 const ME = gql`
   {
@@ -135,6 +137,7 @@ type PostProps = {
   createdAt: Date;
   liked?: boolean;
   comments: CommentType[];
+  editable?: boolean;
 };
 
 const HeaderRow = styled.div`
@@ -187,8 +190,10 @@ export const Post = ({
   author,
   showAuthor,
   comments,
+  editable,
 }: PostProps) => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const [editMode, setEditMode] = useState(false);
   const [like] = useMutation(LIKE);
   const [unlike] = useMutation(UNLIKE);
   const { data } = useQuery(ME);
@@ -198,7 +203,7 @@ export const Post = ({
 
   const Container = isTabletOrMobile ? MobileContainer : DesktopContainer;
 
-  return (
+  return !editMode ? (
     <Container ref={scrollToRef} style={{ scrollMargin: "100px" }}>
       <Area area="header">
         <Link to={`/artist/${author}/${id}`} style={{ width: "100%", textDecoration: "underline" }}>
@@ -225,6 +230,11 @@ export const Post = ({
           </Table>
         ) : (
           <>{dateFormat(createdAt)}</>
+        )}
+        {editable && (
+          <Button onClick={() => setEditMode(true)} style={{ marginLeft: "8px" }}>
+            edit
+          </Button>
         )}
       </Area>
       <Area area="completion">
@@ -278,5 +288,17 @@ export const Post = ({
         </Table>
       </Area>
     </Container>
+  ) : (
+    <PostUpdate
+      editModeOff={() => setEditMode(false)}
+      post={{
+        id: `${id}`,
+        completedness,
+        story,
+        title,
+        inceptionDate,
+        inceptionDemo,
+      }}
+    />
   );
 };
